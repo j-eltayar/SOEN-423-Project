@@ -7,7 +7,7 @@
 | James El-Tayar 	| 40097755 	|
 | Ashraf Khalil  	|          	|
 | Killian Kelly   |          	|
-| Tyler Znoj      |          	|
+| Tyler Znoj      |40005987   |
 
 
 
