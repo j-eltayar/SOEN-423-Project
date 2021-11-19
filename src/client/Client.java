@@ -8,13 +8,13 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.File;
 
-public class client
+public class Client
 {
     private String id;
     private String clientLogName;
     private String location;
     
-    public client(String id) throws IOException {
+    public Client(String id) throws IOException {
         this.id = id;
         this.clientLogName = "ClientLogs\\" + id + ".txt";
         final File yourFile = new File(this.clientLogName);
@@ -104,7 +104,7 @@ public class client
             System.out.println("\n\n\n====================  Login  ====================");
             System.out.print("Please enter your ID: ");
             String id = sc.next();
-            client client = new client(id);
+            Client client = new Client(id);
             int permission = id.charAt(3);
             client.setLocation(id.substring(0, 3));
             while (true) {
