@@ -1,0 +1,20 @@
+module DRRSAPP{
+	interface DRRS
+	{
+	string sayHello();
+
+	string createRoom (in long roomNumber,in string date, in string List_Of_Time_Slots, in string studentIdd);
+	
+	string deleteRoom (in long roomNumber, in string date, in string List_Of_Time_Slots, in string studentId);
+
+	string bookRoom ( in string campusName, in long roomNumber, in string date, in string timeslot, in string studentId);
+    
+	string getAllAvailableTimeSlot(in string date, in string studentId);
+
+	string cancelBooking (in string bookingID, in string studentId);
+	
+	string changeReservation (in string bookingID, in string campusName, in long roomNumber, in string timeslot, in string date, in string studentId);
+
+	oneway void shutdown();
+	};
+};

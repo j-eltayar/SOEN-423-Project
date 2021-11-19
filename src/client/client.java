@@ -1,10 +1,8 @@
 package client;
 
 import java.util.Scanner;
-import java.time.temporal.TemporalAccessor;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.io.Writer;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
