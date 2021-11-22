@@ -25,8 +25,8 @@ public class RMServant extends RMPOA {
 	// Other two RM that this RM will communicate with. Their Name and the instance.
 	private String RMOneName;
 	private String RMTwoName;
-	private RMServant RMOne;
-	private RMServant RMTwo;
+	private RM RMOne;
+	private RM RMTwo;
 	private ORB orb;
 	
 	// Setter for the orb of this servant
