@@ -19,7 +19,7 @@ import java.time.format.DateTimeFormatter;
  */
 public class RMServant extends RMPOA {
 	// Name of the RM.
-	private String replicaName;
+	private String replicaManagerName;
 	// Name of the RM log file .
 	private String replicaLogName;
 	// Other two RM that this RM will communicate with. Their Name and the instance.
@@ -41,10 +41,10 @@ public class RMServant extends RMPOA {
 	
 	// Constructor initializes RM with its name and sets up the file for all logs and sets up other RM names.
 	public RMServant(String name, String RMOneName, String RMTwoName) throws IOException {
-        this.replicaName = name;
+        this.replicaManagerName = name;
         this.RMOneName = RMOneName;
         this.RMTwoName = RMTwoName;
-        this.replicaLogName = "ReplicaLogs\\" + this.replicaName + ".txt";
+        this.replicaLogName = "ReplicaLogs\\" + this.replicaManagerName + ".txt";
         final File yourFile = new File(this.replicaLogName);
         yourFile.createNewFile();
     }
@@ -52,7 +52,7 @@ public class RMServant extends RMPOA {
 	// Basic say hello method to be used for testing.
 	public String sayHello() {
 		// TODO Auto-generated method stub
-		return "\nHello World From: " + this.replicaName + "\n";
+		return "\nHello World From: " + this.replicaManagerName + "\n";
 	}
 	
 	// Log method that takes a string and then inputs it into the RM's log file.
@@ -60,7 +60,7 @@ public class RMServant extends RMPOA {
         try {
             BufferedWriter outStream = new BufferedWriter(new FileWriter(this.replicaLogName, true));
             outStream.newLine();
-            outStream.write("[" + this.getDateTime() + "]" + this.replicaName + " Log: " + input);
+            outStream.write("[" + this.getDateTime() + "]" + this.replicaManagerName + " Log: " + input);
             outStream.close();
         }
         catch (IOException e) {
