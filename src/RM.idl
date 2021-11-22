@@ -1,0 +1,20 @@
+module RMAPP{
+	interface RM
+	{
+	string sayHello();
+
+	string createRoom(in long roomNumber,in string date, in string List_Of_Time_Slots, in string id, in string location);
+
+	string deleteRoom(in long roomNumber, in string date, in string List_Of_Time_Slots, in string id, in string location);
+
+	string bookRoom(in string campusName, in long roomNumber, in string date, in string timeslot, in string id, in string location);
+
+	string getAvailableTimeSlot(in string date, in string id, in string location);
+
+	string cancelBooking(in string bookingID, in string id, in string location);
+
+	string changeReservation(in string bookingID, in string campusName, in long roomNumber, in string timeslot, in string date, in string id, in string location);
+
+	oneway void shutdown();
+	};
+};
