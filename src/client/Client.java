@@ -1,24 +1,49 @@
 package client;
 
 import java.util.Scanner;
+
+import org.omg.CORBA.ORB;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.File;
+import java.net.DatagramPacket;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.SocketException;
+import RMAPP.*;
 
 public class Client
 {
     private String id;
     private String clientLogName;
     private String location;
+    static RM currentReplicaManager;
     
-    public Client(String id) throws IOException {
+    public Client(String id, ORB orb) throws IOException {
         this.id = id;
         this.clientLogName = "ClientLogs\\" + id + ".txt";
         final File yourFile = new File(this.clientLogName);
         yourFile.createNewFile();
+        
+        // Set up which replica manager to communicate with
+        try{
+			// get the root naming context
+			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
+			// Use NamingContextExt instead of NamingContext. This is part of the Interoperable naming Service.
+			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+			// resolve the Object Reference in Naming
+			String name = location;
+			currentReplicaManager = RMHelper.narrow(ncRef.resolve_str(name));
+		} 		
+		catch (Exception e) {		
+			e.printStackTrace(System.out);
+			System.out.println("ERROR : " + e);
+		}
     }
     
     public String getId() {
@@ -108,6 +133,7 @@ public class Client
             int permission = id.charAt(3);
             client.setLocation(id.substring(0, 3));
             while (true) {
+            	ORB orb = ORB.init(args, null);
                 if (65 == permission) {
                     System.out.println("\n\n\n====================  Admin Main Menu  ====================");
                     System.out.println("[1] Create Room");

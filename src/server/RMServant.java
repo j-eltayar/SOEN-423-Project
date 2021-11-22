@@ -1,5 +1,10 @@
 package server;
-
+import RMAPP.*;
+import org.omg.CosNaming.*;
+import org.omg.CosNaming.NamingContextPackage.*;
+import org.omg.CORBA.*;
+import org.omg.PortableServer.*;
+import org.omg.PortableServer.POA;
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -12,19 +17,30 @@ import java.time.format.DateTimeFormatter;
  *	Calculations and manipulation of Data. Acts as the server to all Front-end calls and some RM calls (calls originating from other RMs)
  *	Acts as a client to all all replica interations and some RM interactions (calling other RMs) .
  */
-public class RM {
+public class RMServant extends RMPOA {
 	// Name of the RM.
 	private String replicaName;
 	// Name of the RM log file .
 	private String replicaLogName;
-	// Other two RM that this RM will communicate with.
+	// Other two RM that this RM will communicate with. Their Name and the instance.
 	private String RMOneName;
 	private String RMTwoName;
-	private RM RMOne;
-	private RM RMTwo;
-
+	private RMServant RMOne;
+	private RMServant RMTwo;
+	private ORB orb;
+	
+	// Setter for the orb of this servant
+	public void setORB(ORB orb_val) {
+		orb = orb_val;
+	}
+	
+	// Getter for the orb of this servant
+	public ORB getORB() {
+		return this.orb;
+	}
+	
 	// Constructor initializes RM with its name and sets up the file for all logs and sets up other RM names.
-	public RM(String name, String RMOneName, String RMTwoName) throws IOException {
+	public RMServant(String name, String RMOneName, String RMTwoName) throws IOException {
         this.replicaName = name;
         this.RMOneName = RMOneName;
         this.RMTwoName = RMTwoName;
@@ -61,7 +77,9 @@ public class RM {
     }
     
 	// Create Room method. Create a room in all replicas. 
-    public String createRoom(int room_Number, String date, String list_Of_Time_Slots, String location) {
+    @Override
+	public String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
+    {
         String replicaAnswer = "";
         // Implement here
         this.replicaLog(replicaAnswer);
@@ -69,7 +87,8 @@ public class RM {
     }
     
     // Delete Room method. Delete a room in all replicas. 
-    public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String location) {
+    @Override
+    public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String id, String location) {
         String replicaAnswer = "";
         // Implement here
         this.replicaLog(replicaAnswer);
@@ -80,8 +99,9 @@ public class RM {
     * Book Room method. Book a room at the appropriate location. If the locaiton is this RM then 
     * Book a room in all of this RM's replicas. If the booking is in another RM then transfer the call
     * to that RM.
-    */ 
-    public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String location) {
+    */
+    @Override
+    public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
         String replicaAnswer = "";
         // Implement here
         this.replicaLog(replicaAnswer);
@@ -91,8 +111,9 @@ public class RM {
     /* 
      * Get all vailable time slot method. Get all available time slots in this RM's replicas and 
      * call all other RMs to do the same with theirs.
-     */ 
-    public String getAvailableTimeSlot(String date, String location) {
+     */
+    @Override
+    public String getAvailableTimeSlot(String date, String id, String location) {
         String replicaAnswer = "";
         // Implement here
         this.replicaLog(replicaAnswer);
@@ -103,8 +124,9 @@ public class RM {
      * Cancel Room method. Cancel a room at the appropriate location. If the locaiton is this RM then 
      * Cancel a room in all of this RM's replicas. If the replication is in another RM then transfer the call
      * to that RM.
-     */ 
-    public String cancelBooking(String bookingID, String location) {
+     */
+    @Override
+    public String cancelBooking(String bookingID, String id, String location) {
         String replicaAnswer = "";
         // Implement here
         this.replicaLog(replicaAnswer);
@@ -117,13 +139,20 @@ public class RM {
      * to that RM. Then Book a room at the appropriate location. If the locaiton is this RM then Book a room in 
      * all of this RM's replicas. If the booking is in another RM then transfer the call
 	 * to that RM.
-     */ 
+     */
+    @Override
     public String changeReservation(String bookingID, String selectedCampus, int selectedRoom, String selectedDate, String selectedTimeslot, String id, String location) {
         String replicaAnswer = "";
         // Implement here
         this.replicaLog(replicaAnswer);
         return replicaAnswer;
     }
+
+	@Override
+	public void shutdown() {
+		// TODO Auto-generated method stub
+		
+	}
 	
 
 }
