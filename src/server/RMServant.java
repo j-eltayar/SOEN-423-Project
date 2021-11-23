@@ -29,6 +29,7 @@ public class RMServant extends RMPOA {
 	private RM RMTwo;
 	private ORB orb;
 	
+	
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
 		orb = orb_val;
@@ -37,6 +38,29 @@ public class RMServant extends RMPOA {
 	// Getter for the orb of this servant
 	public ORB getORB() {
 		return this.orb;
+	}
+	public String setRMServers() {
+		try {
+			// get the root naming context
+			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
+			// Use NamingContextExt instead of NamingContext. This is part of the Interoperable naming Service.
+			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+			// resolve the Object Reference in Naming
+		
+			RMOne = RMHelper.narrow(ncRef.resolve_str(RMOneName));
+			RMTwo = RMHelper.narrow(ncRef.resolve_str(RMTwoName));
+			System.out.println(replicaManagerName+RMOne.sayHello());
+			System.out.println(replicaManagerName+RMTwo.sayHello());
+				
+		} 		
+		catch (Exception e) {		
+				
+			e.printStackTrace(System.out);
+			System.out.println("ERROR : " + e);
+			return "flames";
+		}
+		
+		return "great success";
 	}
 	
 	// Constructor initializes RM with its name and sets up the file for all logs and sets up other RM names.
