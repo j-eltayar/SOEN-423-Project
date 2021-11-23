@@ -20,12 +20,12 @@ public class Client
     private String location;
     static RM currentReplicaManager;
     
-    public Client(String id, ORB orb) throws IOException {
+    public Client(String id, String location, ORB orb) throws IOException {
         this.id = id;
         this.clientLogName = "ClientLogs\\" + id + ".txt";
         final File yourFile = new File(this.clientLogName);
         yourFile.createNewFile();
-        
+        this.location=location;
         // Set up which replica manager to communicate with
         try{
 			// get the root naming context
@@ -35,6 +35,7 @@ public class Client
 			// resolve the Object Reference in Naming
 			String name = location;
 			currentReplicaManager = RMHelper.narrow(ncRef.resolve_str(name));
+			System.out.println(currentReplicaManager.sayHello());
 		} 		
 		catch (Exception e) {		
 			e.printStackTrace(System.out);
@@ -126,9 +127,8 @@ public class Client
             System.out.print("Please enter your ID: ");
             String id = sc.next();
             ORB orb = ORB.init(args, null);
-            Client client = new Client(id, null);
+            Client client = new Client(id, id.substring(0, 3), orb);
             int permission = id.charAt(3);
-            client.setLocation(id.substring(0, 3));
             while (true) {
                 if (65 == permission) {
                     System.out.println("\n\n\n====================  Admin Main Menu  ====================");

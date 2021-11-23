@@ -1,0 +1,3 @@
+
+[2021/10/15 23:15:34]DVLS1 Log: 
+[2021/10/15 23:18:48]DVLS1 Log: DVL: 3 | otherServer1.campusName: otherServer1.getAvailableTimeSlot(date, studentId) | otherServer2.campusName: otherServer2.getAvailableTimeSlot(date, studentId)

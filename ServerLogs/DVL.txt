@@ -1,0 +1,4 @@
+
+[2021/10/15 23:11:47]DVL Log: CREATE ROOM (SUCCESS) :  Date=03-10-2021 |  Room number=101 |  Timeslots= [ 11:00 | Not Booked |   ] 
+[2021/10/15 23:15:00]DVL Log: CREATE ROOM (SUCCESS) :  Date=03-10-2021 |  Room number=101 |  Timeslots= [ 11:00 | Not Booked |   ]  [ 12:00 | Not Booked |   ] 
+[2021/10/15 23:15:16]DVL Log: CREATE ROOMS (SUCCESS) :  Date=03-10-2021 |  Room number=101 |  Timeslots= [ 13:00 | Not Booked |   ] 
