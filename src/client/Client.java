@@ -11,10 +11,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.net.DatagramPacket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.SocketException;
 import RMAPP.*;
 
 public class Client
@@ -129,11 +125,11 @@ public class Client
             System.out.println("\n\n\n====================  Login  ====================");
             System.out.print("Please enter your ID: ");
             String id = sc.next();
-            Client client = new Client(id);
+            ORB orb = ORB.init(args, null);
+            Client client = new Client(id, null);
             int permission = id.charAt(3);
             client.setLocation(id.substring(0, 3));
             while (true) {
-            	ORB orb = ORB.init(args, null);
                 if (65 == permission) {
                     System.out.println("\n\n\n====================  Admin Main Menu  ====================");
                     System.out.println("[1] Create Room");
