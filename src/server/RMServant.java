@@ -77,10 +77,10 @@ public class RMServant extends RMPOA {
 			// Use NamingContextExt instead of NamingContext. This is part of the Interoperable naming Service.
 			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 			// resolve the Object Reference in Naming
-			RSOne = RSHelper.narrow(ncRef.resolve_str(RMOneName));
-			RSTwo = RSHelper.narrow(ncRef.resolve_str(RMOneName));
-			RSThree = RSHelper.narrow(ncRef.resolve_str(RMOneName));
-			RSFour = RSHelper.narrow(ncRef.resolve_str(RMOneName));
+			RSOne = RSHelper.narrow(ncRef.resolve_str(RSOneName));
+			RSTwo = RSHelper.narrow(ncRef.resolve_str(RSTwoName));
+			RSThree = RSHelper.narrow(ncRef.resolve_str(RSThreeName));
+			RSFour = RSHelper.narrow(ncRef.resolve_str(RSFourName));
 		} 		
 		catch (Exception e) {		
 				
@@ -111,8 +111,11 @@ public class RMServant extends RMPOA {
 	@Override
 	public String sayHello() {
 		
-		return "\nHello World From: " + this.replicaManagerName + "\n";
-		
+		if (this.replicaManagerName == "DVL")
+		return RMOne.sayHello() + RMTwo.sayHello() + "\nHello World From: " + this.replicaManagerName + "\n Servants: "+RSOne.sayHello()+" "+RSTwo.sayHello()+" "+RSThree.sayHello()+" "+RSFour.sayHello();
+		else {
+			return "\nHello World From: " + this.replicaManagerName + "\n Servants: "+RSOne.sayHello()+" "+RSTwo.sayHello()+" "+RSThree.sayHello()+" "+RSFour.sayHello();
+		}
 	}
 	
 	// Log method that takes a string and then inputs it into the RM's log file.

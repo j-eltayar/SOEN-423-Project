@@ -41,8 +41,8 @@ public class RSServant1 extends RSPOA{
 	
 	@Override
 	public String sayHello() {
-
-		return "\nHello World From: " + this.replicaServerName + "\n";
+		
+		return "\nHello World From: " + this.replicaServerName + "\n" ;
 		
 	}
 	
