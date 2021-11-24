@@ -15,41 +15,85 @@ import java.time.format.DateTimeFormatter;
 
 public class RSServant4 extends RSPOA{
 
+	// Name of the RS.
+	private String replicaServerName;
+	// Name of the RS log file .
+	private String replicaServerLogName;
+	
+	// Constructor initializes RM with its name and sets up the file for all logs and sets up other RM names.
+	public RSServant4(String name, String RMOneName, String RMTwoName) throws IOException {
+        this.replicaServerName = name;
+        this.replicaServerLogName = "ReplicaServerLogs\\" + this.replicaServerName + ".txt";
+        final File yourFile = new File(this.replicaServerLogName);
+        yourFile.createNewFile();
+    }
+	
 	@Override
 	public String sayHello() {
-		// TODO Auto-generated method stub
-		return null;
+
+		return "\nHello World From: " + this.replicaServerName + "\n";
+		
 	}
+	
+	// Log method that takes a string and then inputs it into the RM's log file.
+	public void replicaManagerLog(String input) {
+        try {
+            BufferedWriter outStream = new BufferedWriter(new FileWriter(this.replicaServerLogName, true));
+            outStream.newLine();
+            outStream.write("[" + this.getDateTime() + "]" + this.replicaServerName + " Log: " + input);
+            outStream.close();
+        }
+        catch (IOException e) {
+            System.out.println("An error occurred logging: " + input);
+            e.printStackTrace();
+        }
+    }
+	
+	// Returns the current time. Used in the logging process.
+	public String getDateTime() {
+        DateTimeFormatter dtf = DateTimeFormatter.ofPattern("yyyy/MM/dd HH:mm:ss");
+        LocalDateTime now = LocalDateTime.now();
+        return dtf.format(now);
+    }
 
 	@Override
 	public String createRoomHere(int roomNumber, String date, String List_Of_Time_Slots, String id, String location) {
-		// TODO Auto-generated method stub
-		return null;
+        String replicaServerAnswer = "";
+        // Implement here
+        this.replicaManagerLog(replicaServerAnswer);
+        return replicaServerAnswer;
 	}
 
 	@Override
 	public String deleteRoomHere(int roomNumber, String date, String List_Of_Time_Slots, String id, String location) {
-		// TODO Auto-generated method stub
-		return null;
+        String replicaServerAnswer = "";
+        // Implement here
+        this.replicaManagerLog(replicaServerAnswer);
+        return replicaServerAnswer;
 	}
 
 	@Override
-	public String bookRoomHere(String campusName, int roomNumber, String date, String timeslot, String id,
-			String location) {
-		// TODO Auto-generated method stub
-		return null;
+	public String bookRoomHere(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
+        String replicaServerAnswer = "";
+        // Implement here
+        this.replicaManagerLog(replicaServerAnswer);
+        return replicaServerAnswer;
 	}
 
 	@Override
 	public String getAvailableTimeSlotHere(String date, String id, String location) {
-		// TODO Auto-generated method stub
-		return null;
+        String replicaServerAnswer = "";
+        // Implement here
+        this.replicaManagerLog(replicaServerAnswer);
+        return replicaServerAnswer;
 	}
 
 	@Override
 	public String cancelBookingHere(String bookingID, String id, String location) {
-		// TODO Auto-generated method stub
-		return null;
+        String replicaServerAnswer = "";
+        // Implement here
+        this.replicaManagerLog(replicaServerAnswer);
+        return replicaServerAnswer;
 	}
 
 	@Override
@@ -57,5 +101,4 @@ public class RSServant4 extends RSPOA{
 		// TODO Auto-generated method stub
 		
 	}
-
 }
