@@ -21,7 +21,7 @@ public class RSServant3 extends RSPOA{
 	private String replicaServerLogName;
 	
 	// Constructor initializes RM with its name and sets up the file for all logs and sets up other RM names.
-	public RSServant3(String name, String RMOneName, String RMTwoName) throws IOException {
+	public RSServant3(String name) throws IOException {
         this.replicaServerName = name;
         this.replicaServerLogName = "ReplicaServerLogs\\" + this.replicaServerName + ".txt";
         final File yourFile = new File(this.replicaServerLogName);
