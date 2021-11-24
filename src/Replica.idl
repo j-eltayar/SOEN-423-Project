@@ -1,0 +1,18 @@
+module RSAPP{
+	interface RS
+	{
+	string sayHello();
+
+	string createRoomHere(in long roomNumber,in string date, in string List_Of_Time_Slots, in string id, in string location);
+
+	string deleteRoomHere(in long roomNumber, in string date, in string List_Of_Time_Slots, in string id, in string location);
+
+	string bookRoomHere(in string campusName, in long roomNumber, in string date, in string timeslot, in string id, in string location);
+
+	string getAvailableTimeSlotHere(in string date, in string id, in string location);
+
+	string cancelBookingHere(in string bookingID, in string id, in string location);
+
+	oneway void shutdown();
+	};
+};

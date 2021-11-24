@@ -21,15 +21,14 @@ public class RMServant extends RMPOA {
 	// Name of the RM.
 	private String replicaManagerName;
 	// Name of the RM log file .
-	private String replicaLogName;
+	private String replicaManagerLogName;
 	// Other two RM that this RM will communicate with. Their Name and the instance.
 	private String RMOneName;
 	private String RMTwoName;
 	private RM RMOne;
 	private RM RMTwo;
 	private ORB orb;
-	
-	
+
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
 		orb = orb_val;
@@ -39,6 +38,7 @@ public class RMServant extends RMPOA {
 	public ORB getORB() {
 		return this.orb;
 	}
+	
 	public String setRMServers() {
 		try {
 			// get the root naming context
@@ -68,21 +68,23 @@ public class RMServant extends RMPOA {
         this.replicaManagerName = name;
         this.RMOneName = RMOneName;
         this.RMTwoName = RMTwoName;
-        this.replicaLogName = "ReplicaLogs\\" + this.replicaManagerName + ".txt";
-        final File yourFile = new File(this.replicaLogName);
+        this.replicaManagerLogName = "ReplicaManagerLogs\\" + this.replicaManagerName + ".txt";
+        final File yourFile = new File(this.replicaManagerLogName);
         yourFile.createNewFile();
     }
 	
 	// Basic say hello method to be used for testing.
+	@Override
 	public String sayHello() {
-		// TODO Auto-generated method stub
+		
 		return "\nHello World From: " + this.replicaManagerName + "\n";
+		
 	}
 	
 	// Log method that takes a string and then inputs it into the RM's log file.
-	public void replicaLog(String input) {
+	public void replicaManagerLog(String input) {
         try {
-            BufferedWriter outStream = new BufferedWriter(new FileWriter(this.replicaLogName, true));
+            BufferedWriter outStream = new BufferedWriter(new FileWriter(this.replicaManagerLogName, true));
             outStream.newLine();
             outStream.write("[" + this.getDateTime() + "]" + this.replicaManagerName + " Log: " + input);
             outStream.close();
@@ -104,19 +106,19 @@ public class RMServant extends RMPOA {
     @Override
 	public String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
     {
-        String replicaAnswer = "";
+        String replicaManagerAnswer = "";
         // Implement here
-        this.replicaLog(replicaAnswer);
-        return replicaAnswer;
+        this.replicaManagerLog(replicaManagerAnswer);
+        return replicaManagerAnswer;
     }
     
     // Delete Room method. Delete a room in all replicas. 
     @Override
     public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String id, String location) {
-        String replicaAnswer = "";
+        String replicaManagerAnswer = "";
         // Implement here
-        this.replicaLog(replicaAnswer);
-        return replicaAnswer;
+        this.replicaManagerLog(replicaManagerAnswer);
+        return replicaManagerAnswer;
     }
     
    /* 
@@ -126,10 +128,10 @@ public class RMServant extends RMPOA {
     */
     @Override
     public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
-        String replicaAnswer = "";
+        String replicaManagerAnswer = "";
         // Implement here
-        this.replicaLog(replicaAnswer);
-        return replicaAnswer;
+        this.replicaManagerLog(replicaManagerAnswer);
+        return replicaManagerAnswer;
     }
     
     /* 
@@ -138,10 +140,10 @@ public class RMServant extends RMPOA {
      */
     @Override
     public String getAvailableTimeSlot(String date, String id, String location) {
-        String replicaAnswer = "";
+        String replicaManagerAnswer = "";
         // Implement here
-        this.replicaLog(replicaAnswer);
-        return replicaAnswer;
+        this.replicaManagerLog(replicaManagerAnswer);
+        return replicaManagerAnswer;
     }
 
     /* 
@@ -151,10 +153,10 @@ public class RMServant extends RMPOA {
      */
     @Override
     public String cancelBooking(String bookingID, String id, String location) {
-        String replicaAnswer = "";
+        String replicaManagerAnswer = "";
         // Implement here
-        this.replicaLog(replicaAnswer);
-        return replicaAnswer;
+        this.replicaManagerLog(replicaManagerAnswer);
+        return replicaManagerAnswer;
     }
     
     /* 
@@ -166,10 +168,10 @@ public class RMServant extends RMPOA {
      */
     @Override
     public String changeReservation(String bookingID, String selectedCampus, int selectedRoom, String selectedDate, String selectedTimeslot, String id, String location) {
-        String replicaAnswer = "";
+        String replicaManagerAnswer = "";
         // Implement here
-        this.replicaLog(replicaAnswer);
-        return replicaAnswer;
+        this.replicaManagerLog(replicaManagerAnswer);
+        return replicaManagerAnswer;
     }
 
 	@Override
