@@ -28,6 +28,16 @@ public class RMServant extends RMPOA {
 	private String RMTwoName;
 	private RM RMOne;
 	private RM RMTwo;
+	// Four replica servers managed by this RM
+	private String RSOneName;
+	private String RSTwoName;
+	private String RSThreeName;
+	private String RSFourName;
+	private RS RSOne;
+	private RS RSTwo;
+	private RS RSThree;
+	private RS RSFour;
+	// An orb
 	private ORB orb;
 
 	// Setter for the orb of this servant
@@ -47,28 +57,51 @@ public class RMServant extends RMPOA {
 			// Use NamingContextExt instead of NamingContext. This is part of the Interoperable naming Service.
 			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 			// resolve the Object Reference in Naming
-		
 			RMOne = RMHelper.narrow(ncRef.resolve_str(RMOneName));
 			RMTwo = RMHelper.narrow(ncRef.resolve_str(RMTwoName));
-			System.out.println(replicaManagerName+RMOne.sayHello());
-			System.out.println(replicaManagerName+RMTwo.sayHello());
-				
 		} 		
 		catch (Exception e) {		
 				
 			e.printStackTrace(System.out);
 			System.out.println("ERROR : " + e);
-			return "flames";
+			return "Error FLAMES";
 		}
 		
-		return "great success";
+		return "GREAT SUCCESS!!";
+	}
+	
+	public String setRSServers() {
+		try {
+			// get the root naming context
+			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
+			// Use NamingContextExt instead of NamingContext. This is part of the Interoperable naming Service.
+			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+			// resolve the Object Reference in Naming
+			RSOne = RSHelper.narrow(ncRef.resolve_str(RMOneName));
+			RSTwo = RSHelper.narrow(ncRef.resolve_str(RMOneName));
+			RSThree = RSHelper.narrow(ncRef.resolve_str(RMOneName));
+			RSFour = RSHelper.narrow(ncRef.resolve_str(RMOneName));
+		} 		
+		catch (Exception e) {		
+				
+			e.printStackTrace(System.out);
+			System.out.println("ERROR : " + e);
+			return "Error FLAMES";
+		}
+		
+		return "GREAT SUCCESS!!";
 	}
 	
 	// Constructor initializes RM with its name and sets up the file for all logs and sets up other RM names.
-	public RMServant(String name, String RMOneName, String RMTwoName) throws IOException {
+	// Also initalizes the replica names for the four replica servers
+	public RMServant(String name, String RMOneName, String RMTwoName, String RSOneName, String RSTwoName, String RSThreeName, String RSFourName) throws IOException {
         this.replicaManagerName = name;
         this.RMOneName = RMOneName;
         this.RMTwoName = RMTwoName;
+        this.RSOneName = RSOneName;
+        this.RSTwoName = RSTwoName;
+        this.RSThreeName = RSThreeName;
+        this.RSFourName = RSFourName;
         this.replicaManagerLogName = "ReplicaManagerLogs\\" + this.replicaManagerName + ".txt";
         final File yourFile = new File(this.replicaManagerLogName);
         yourFile.createNewFile();

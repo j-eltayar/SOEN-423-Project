@@ -12,13 +12,24 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
-
 public class RSServant1 extends RSPOA{
 
 	// Name of the RS.
 	private String replicaServerName;
 	// Name of the RS log file .
 	private String replicaServerLogName;
+	//An orb
+	private ORB orb;
+	
+	// Setter for the orb of this servant
+	public void setORB(ORB orb_val) {
+		orb = orb_val;
+	}
+	
+	// Getter for the orb of this servant
+	public ORB getORB() {
+		return this.orb;
+	}
 	
 	// Constructor initializes RM with its name and sets up the file for all logs and sets up other RM names.
 	public RSServant1(String name) throws IOException {
