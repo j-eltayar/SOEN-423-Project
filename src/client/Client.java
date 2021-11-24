@@ -1,24 +1,46 @@
 package client;
 
 import java.util.Scanner;
+
+import org.omg.CORBA.ORB;
+import org.omg.CosNaming.NamingContextExt;
+import org.omg.CosNaming.NamingContextExtHelper;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.File;
+import RMAPP.*;
 
 public class Client
 {
     private String id;
     private String clientLogName;
     private String location;
+    static RM currentReplicaManager;
     
-    public Client(String id) throws IOException {
+    public Client(String id, String location, ORB orb) throws IOException {
         this.id = id;
         this.clientLogName = "ClientLogs\\" + id + ".txt";
         final File yourFile = new File(this.clientLogName);
         yourFile.createNewFile();
+        this.location=location;
+        // Set up which replica manager to communicate with
+        try{
+			// get the root naming context
+			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
+			// Use NamingContextExt instead of NamingContext. This is part of the Interoperable naming Service.
+			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+			// resolve the Object Reference in Naming
+			String name = location;
+			currentReplicaManager = RMHelper.narrow(ncRef.resolve_str(name));
+			System.out.println(currentReplicaManager.sayHello());
+		} 		
+		catch (Exception e) {		
+			e.printStackTrace(System.out);
+			System.out.println("ERROR : " + e);
+		}
     }
     
     public String getId() {
@@ -58,42 +80,42 @@ public class Client
     
     public String createRoom(int room_Number, String date, String list_Of_Time_Slots, String location) {
         String serverAnswer = "";
-        // Implement here
+        currentReplicaManager.createRoom(room_Number, date, list_Of_Time_Slots, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String location) {
         String serverAnswer = "";
-        // Implement here
+        currentReplicaManager.deleteRoom(room_Number, date, list_Of_Time_Slots, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String location) {
         String serverAnswer = "";
-        // Implement here
+        currentReplicaManager.bookRoom(campusName, roomNumber, date, timeslot, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String getAvailableTimeSlot(String date, String location) {
         String serverAnswer = "";
-        // Implement here
+        currentReplicaManager.getAvailableTimeSlot(date, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String cancelBooking(String bookingID, String location) {
         String serverAnswer = "";
-        // Implement here
+        currentReplicaManager.cancelBooking(bookingID, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String changeReservation(String bookingID, String selectedCampus, int selectedRoom, String selectedDate, String selectedTimeslot, String id, String location) {
         String serverAnswer = "";
-        // Implement here
+        currentReplicaManager.changeReservation(bookingID, selectedCampus, selectedRoom, selectedTimeslot, selectedDate, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
@@ -104,9 +126,9 @@ public class Client
             System.out.println("\n\n\n====================  Login  ====================");
             System.out.print("Please enter your ID: ");
             String id = sc.next();
-            Client client = new Client(id);
+            ORB orb = ORB.init(args, null);
+            Client client = new Client(id, id.substring(0, 3), orb);
             int permission = id.charAt(3);
-            client.setLocation(id.substring(0, 3));
             while (true) {
                 if (65 == permission) {
                     System.out.println("\n\n\n====================  Admin Main Menu  ====================");
