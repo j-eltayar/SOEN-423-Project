@@ -203,7 +203,7 @@ public class RSServant1 extends RSPOA{
 						else {
 							element[1] = bookingID;
 							element[2] = id;
-							replicaServerAnswer = "BOOK ROOM (SUCCESS)";
+							replicaServerAnswer = bookingID;
 						}
 					}					
 				}
@@ -217,7 +217,7 @@ public class RSServant1 extends RSPOA{
 			replicaServerAnswer = "BOOK ROOM (FAILURE)";
 		}    	
         
-        this.replicaManagerLog(replicaServerAnswer);
+        this.replicaManagerLog("BOOK ROOM (SUCCESS)"+ replicaServerAnswer);
         return replicaServerAnswer;
 	}
 
