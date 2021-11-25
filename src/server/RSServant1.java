@@ -126,20 +126,20 @@ public class RSServant1 extends RSPOA{
  					}   					
      			}
  				if(addedTS.equals("")){
- 					replicaServerAnswer = "CREATE ROOMS (FAILURE)";
+ 					replicaServerAnswer = "CREATE ROOM (FAILURE)";
  				} 
- 				replicaServerAnswer = "CREATE ROOMS (SUCCESS)";
+ 				replicaServerAnswer = "CREATE ROOM (SUCCESS)";
      		}
      		else {
      			this.getDataBase().get(date).put(roomNumber, List_Of_Time_Slots);
-     			replicaServerAnswer = "CREATE ROOMS (SUCCESS)";
+     			replicaServerAnswer = "CREATE ROOM (SUCCESS)";
      		}
      	}
      	else {
      		HashMap<Integer, List<String[]>> tempHP = new HashMap<Integer, List<String[]>>();
      		tempHP.put(roomNumber, List_Of_Time_Slots);
      		this.getDataBase().put(date, tempHP);
-     		replicaServerAnswer = "CREATE ROOMS (SUCCESS)";
+     		replicaServerAnswer = "CREATE ROOM (SUCCESS)";
      	}
         
         this.replicaManagerLog(replicaServerAnswer);
@@ -172,16 +172,16 @@ public class RSServant1 extends RSPOA{
      			}
      		}
      		else {
-     			replicaServerAnswer = "DELETE ROOMS (FAILURE)";
+     			replicaServerAnswer = "DELETE ROOM (FAILURE)";
      		}
      	}
      	else {
-     		replicaServerAnswer = "DELETE ROOMS (FAILURE)";
+     		replicaServerAnswer = "DELETE ROOM (FAILURE)";
      	}
  		if(removedTS.equals("")){
- 			replicaServerAnswer = "DELETE ROOMS (FAILURE)";
+ 			replicaServerAnswer = "DELETE ROOM (FAILURE)";
  		} 	
- 		replicaServerAnswer = "DELETE ROOMS (SUCCESS)";
+ 		replicaServerAnswer = "DELETE ROOM (SUCCESS)";
         
         this.replicaManagerLog(replicaServerAnswer);
         return replicaServerAnswer;
