@@ -9,7 +9,6 @@ import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Set;
 
-@WebService(endpointInterface = "ca.concordia.immaroot.servers.CampusServer", targetNamespace = "http://servers.immaroot.concordia.ca/")
 public class CampusServerImpl implements CampusServer, Runnable {
 
     Campus campus;
@@ -35,7 +34,6 @@ public class CampusServerImpl implements CampusServer, Runnable {
         ep.publish(url);
     }
 
-    @WebMethod
     @Override
     public String createRoom(int roomNumber, Date date, TimeSlot[] timeSlots, String id) {
         try {
@@ -46,7 +44,6 @@ public class CampusServerImpl implements CampusServer, Runnable {
         }
     }
 
-    @WebMethod
     @Override
     public String deleteRoom(int roomNumber, Date date, TimeSlot[] timeSlots, String id) {
         Set<TimeSlot> timeSlotSet = new HashSet<>(Arrays.asList(timeSlots));
@@ -58,7 +55,6 @@ public class CampusServerImpl implements CampusServer, Runnable {
         }
     }
 
-    @WebMethod
     @Override
     public String getAvailableTimeSlot(Date date, String id) {
         StringBuilder sb = new StringBuilder();
@@ -79,7 +75,6 @@ public class CampusServerImpl implements CampusServer, Runnable {
         return sb.toString();
     }
 
-    @WebMethod
     @Override
     public String bookRoom(Campus campus, int roomNumber, Date date, TimeSlot timeSlot, String id) {
         int bookingCount = this.database.getBookingNum(id);
@@ -123,7 +118,6 @@ public class CampusServerImpl implements CampusServer, Runnable {
         }
     }
 
-    @WebMethod
     @Override
     public String cancelBooking(String bookingID, String id) {
         String campusName = bookingID.substring(0, 3);
