@@ -144,7 +144,7 @@ public class RMServant extends RMPOA {
 	public String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
     {
         String replicaManagerAnswer = "";
-        // Implement here
+        replicaManagerAnswer = validateResponseString(RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location), RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location) , RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location), RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location));
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -153,7 +153,7 @@ public class RMServant extends RMPOA {
     @Override
     public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String id, String location) {
         String replicaManagerAnswer = "";
-        // Implement here
+        replicaManagerAnswer = validateResponseString(RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location));
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -166,7 +166,15 @@ public class RMServant extends RMPOA {
     @Override
     public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
         String replicaManagerAnswer = "";
-        // Implement here
+        if(location.contentEquals(replicaManagerName)) {
+        	replicaManagerAnswer = validateResponseString(RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location));
+        }
+        else if(location.contentEquals(RMOneName)) {
+        	replicaManagerAnswer = RMOne.bookRoom(campusName, roomNumber, date, timeslot, id, location);
+        }
+        else {
+        	replicaManagerAnswer = RMTwo.bookRoom(campusName, roomNumber, date, timeslot, id, location);
+        }
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -178,7 +186,14 @@ public class RMServant extends RMPOA {
     @Override
     public String getAvailableTimeSlot(String date, String id, String location) {
         String replicaManagerAnswer = "";
-        // Implement here
+        String answerHere = "";
+        answerHere = validateResponseString(RSOne.getAvailableTimeSlotHere(date, id, location), RSTwo.getAvailableTimeSlotHere(date, id, location), RSThree.getAvailableTimeSlotHere(date, id, location), RSFour.getAvailableTimeSlotHere(date, id, location));
+        if(location.contentEquals(replicaManagerName)) {
+        	replicaManagerAnswer = replicaManagerName + ":" + answerHere + "|" + RMOne.getAvailableTimeSlot(date, id, location) + ":" + answerHere + "|" + RMTwo.getAvailableTimeSlot(date, id, location);
+        }
+        else{
+        	replicaManagerAnswer = answerHere;
+        }
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -191,7 +206,15 @@ public class RMServant extends RMPOA {
     @Override
     public String cancelBooking(String bookingID, String id, String location) {
         String replicaManagerAnswer = "";
-        // Implement here
+        if(location.contentEquals(replicaManagerName)) {
+        	
+        }
+        else if(location.contentEquals(RMOneName)) {
+        	replicaManagerAnswer = RMOne.cancelBooking(bookingID, id, location);
+        }
+        else {
+        	replicaManagerAnswer = RMTwo.cancelBooking(bookingID, id, location);
+        }
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -206,7 +229,11 @@ public class RMServant extends RMPOA {
     @Override
     public String changeReservation(String bookingID, String selectedCampus, int selectedRoom, String selectedDate, String selectedTimeslot, String id, String location) {
         String replicaManagerAnswer = "";
-        // Implement here
+        
+        String serverAnswer1 = this.cancelBooking(bookingID, id, location);
+        String serverAnswer2 = this.bookRoom(selectedCampus, selectedRoom, selectedDate, selectedTimeslot, id, location);;
+        replicaManagerAnswer = serverAnswer1 + serverAnswer2;
+        
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -215,6 +242,62 @@ public class RMServant extends RMPOA {
 	public void shutdown() {
 		// TODO Auto-generated method stub
 		
+	}
+	
+	// Return String that occurs the most often
+	public String validateResponseString(String resOne, String resTwo, String resThree, String resFour){
+		String replicaManagerAnswer = "";
+		String[] resArray = { resOne,  resTwo, resThree, resFour};
+	    boolean[] seen = new boolean[resArray.length];
+	    String result = null;
+	    int result_count = 0;
+	    for (int i = 0; i < resArray.length; i++) {
+	        if (!seen[i]) {
+	            seen[i] = true;
+	            int count = 1;
+	            for (int j = i + 1; j < resArray.length; j++) {
+	                if (!seen[j]) {
+	                    if (resArray[i].equals(resArray[j])) {
+	                        seen[j] = true;
+	                        count++;
+	                    }
+	                }
+	            }
+	            if (count > result_count) {
+	                result_count = count;
+	                result = resArray[i];
+	            }
+	        }
+	        
+	    }
+	    replicaManagerAnswer = result;
+	    return replicaManagerAnswer;
+	}
+	
+	// Return int that occurs the most often
+	public int validateResponseInt(int resOne, int resTwo, int resThree, int resFour){
+		int replicaManagerAnswer = 0;
+		int[] resArray = {resOne, resTwo, resThree, resFour};
+		int count = 1, tempCount;
+		  int popular = resArray[0];
+		  int temp = 0;
+		  for (int i = 0; i < (resArray.length - 1); i++)
+		  {
+		    temp = resArray[i];
+		    tempCount = 0;
+		    for (int j = 1; j < resArray.length; j++)
+		    {
+		      if (temp == resArray[j])
+		        tempCount++;
+		    }
+		    if (tempCount > count)
+		    {
+		      popular = temp;
+		      count = tempCount;
+		    }
+		  }
+		  replicaManagerAnswer = popular;
+		 return replicaManagerAnswer;
 	}
 	
 
