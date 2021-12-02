@@ -79,6 +79,9 @@ public class RSServant3 extends RSPOA{
 	@Override
 	public String createRoomHere(int roomNumber, String date, String List_Of_Time_Slots, String id, String location) {
         String replicaServerAnswer;
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
 		Date roomDate = getDate(date);
 		String[] timeSlotsString = List_Of_Time_Slots.split("\\.");
 		TimeSlot[] timeSlots = new TimeSlot[timeSlotsString.length];
@@ -110,6 +113,9 @@ public class RSServant3 extends RSPOA{
 	@Override
 	public String deleteRoomHere(int roomNumber, String date, String List_Of_Time_Slots, String id, String location) {
 		String replicaServerAnswer;
+		String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
 		Date roomDate = getDate(date);
 		String[] timeSlotsString = List_Of_Time_Slots.split("\\.");
 		TimeSlot[] timeSlots = new TimeSlot[timeSlotsString.length];
@@ -125,6 +131,9 @@ public class RSServant3 extends RSPOA{
 	@Override
 	public String bookRoomHere(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
 		String replicaServerAnswer;
+		String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
 		Date roomDate = getDate(date);
 		TimeSlot timeSlot = getTimeSlot(timeslot);
 		replicaServerAnswer = server.bookRoom(Campus.valueOf(campusName), roomNumber, roomDate, timeSlot, id);
@@ -136,6 +145,10 @@ public class RSServant3 extends RSPOA{
 	@Override
 	public String getAvailableTimeSlotHere(String date, String id, String location) {
 		String replicaServerAnswer;
+		String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
+    	
 		Date roomDate = getDate(date);
 		replicaServerAnswer = server.getAvailableTimeSlot(roomDate, id);
 
@@ -146,6 +159,9 @@ public class RSServant3 extends RSPOA{
 	@Override
 	public String cancelBookingHere(String bookingID, String id, String location) {
 		String replicaServerAnswer;
+		String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
 
 		replicaServerAnswer = server.cancelBooking(bookingID, id);
 

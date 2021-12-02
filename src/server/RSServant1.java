@@ -97,7 +97,9 @@ public class RSServant1 extends RSPOA{
 	@Override
 	public String createRoomHere(int roomNumber, String date, String String_Of_Time_Slots, String id, String location) {
         String replicaServerAnswer = "";
-        
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
         
         // Implement here
         // String to proper list
@@ -149,6 +151,9 @@ public class RSServant1 extends RSPOA{
 	@Override
 	public String deleteRoomHere(int roomNumber, String date, String String_Of_Time_Slots, String id, String location) {
         String replicaServerAnswer = "";
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
         
         // Implement here
         // String to proper list
@@ -191,6 +196,11 @@ public class RSServant1 extends RSPOA{
 	public String bookRoomHere(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
         String replicaServerAnswer = "";
         
+    	String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
+
+    
         // Implement here
         String bookingID = campusName + "|" + date+  "|" + roomNumber + "|"  + timeslot + "|" + id;
     	if (this.getDataBase().containsKey(date)){
@@ -224,6 +234,11 @@ public class RSServant1 extends RSPOA{
 	@Override
 	public String getAvailableTimeSlotHere(String date, String id, String location) {
         String replicaServerAnswer = "";
+        
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
+
         // Implement here
         int total = 0;
 		if(this.getDataBase().get(date)!=null){
@@ -248,6 +263,10 @@ public class RSServant1 extends RSPOA{
 	@Override
 	public String cancelBookingHere(String bookingID, String id, String location) {
         String replicaServerAnswer = "";
+        
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
         
         // Implement here
         String[] bookingIDArray = bookingID.split("\\|");

@@ -144,7 +144,7 @@ public class RMServant extends RMPOA {
 	public String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
     {
         String replicaManagerAnswer = "";
-        replicaManagerAnswer = validateResponseString(RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location), RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location) , RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location), RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location));
+        replicaManagerAnswer = validateResponseString(RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1"), RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1") , RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1"), RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1"));
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -153,7 +153,7 @@ public class RMServant extends RMPOA {
     @Override
     public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String id, String location) {
         String replicaManagerAnswer = "";
-        replicaManagerAnswer = validateResponseString(RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location));
+        replicaManagerAnswer = validateResponseString(RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2"), RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2"), RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2"), RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2"));
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -167,7 +167,7 @@ public class RMServant extends RMPOA {
     public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
         String replicaManagerAnswer = "";
         if(location.contentEquals(replicaManagerName)) {
-        	replicaManagerAnswer = validateResponseString(RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location));
+        	replicaManagerAnswer = validateResponseString(RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3"), RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3"), RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3"), RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3"));
         }
         else if(location.contentEquals(RMOneName)) {
         	replicaManagerAnswer = RMOne.bookRoom(campusName, roomNumber, date, timeslot, id, location);
@@ -187,7 +187,7 @@ public class RMServant extends RMPOA {
     public String getAvailableTimeSlot(String date, String id, String location) {
         String replicaManagerAnswer = "";
         String answerHere = "";
-        answerHere = validateResponseString(RSOne.getAvailableTimeSlotHere(date, id, location), RSTwo.getAvailableTimeSlotHere(date, id, location), RSThree.getAvailableTimeSlotHere(date, id, location), RSFour.getAvailableTimeSlotHere(date, id, location));
+        answerHere = validateResponseString(RSOne.getAvailableTimeSlotHere(date, id, location+"!4"), RSTwo.getAvailableTimeSlotHere(date, id, location+"!4"), RSThree.getAvailableTimeSlotHere(date, id, location+"!4"), RSFour.getAvailableTimeSlotHere(date, id, location+"!4"));
         if(location.contentEquals(replicaManagerName)) {
         	replicaManagerAnswer = replicaManagerName + ":" + answerHere + "|" + RMOne.getAvailableTimeSlot(date, id, location) + ":" + answerHere + "|" + RMTwo.getAvailableTimeSlot(date, id, location);
         }
@@ -207,7 +207,7 @@ public class RMServant extends RMPOA {
     public String cancelBooking(String bookingID, String id, String location) {
         String replicaManagerAnswer = "";
         if(location.contentEquals(replicaManagerName)) {
-        	
+        	replicaManagerAnswer = validateResponseString(RSOne.cancelBookingHere(bookingID, id, location+"!4"), RSTwo.cancelBookingHere(bookingID, id, location+"!4"), RSThree.cancelBookingHere(bookingID, id, location+"!4"), RSFour.cancelBookingHere(bookingID, id, location+"!4"));
         }
         else if(location.contentEquals(RMOneName)) {
         	replicaManagerAnswer = RMOne.cancelBooking(bookingID, id, location);

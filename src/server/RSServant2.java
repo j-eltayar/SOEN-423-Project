@@ -173,6 +173,9 @@ public class RSServant2 extends RSPOA{
 	@Override
 	public String createRoomHere(int roomNumber, String date, String timeSlots, String id, String location) {
         String replicaServerAnswer = "";
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
         // Implement here
         String[] ts = timeSlots.split(",");
 		if(rooms.get(date)==null) {
@@ -205,6 +208,9 @@ public class RSServant2 extends RSPOA{
 	@Override
 	public String deleteRoomHere(int roomNumber, String date, String timeSlots, String id, String location) {
         String replicaServerAnswer = "";
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
         // Implement here
         String[] ts = timeSlots.split(",");
 		// TODO Auto-generated method stub
@@ -225,6 +231,9 @@ public class RSServant2 extends RSPOA{
 	@Override
 	public String bookRoomHere(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
         String replicaServerAnswer = "";
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
         // Implement here
         HashMap<String, RoomRecord> roomRecords = rooms.get(date);
     
@@ -248,6 +257,9 @@ public class RSServant2 extends RSPOA{
 	@Override
 	public String getAvailableTimeSlotHere(String date, String id, String location) {
         String replicaServerAnswer = "";
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
         // Implement here
         HashMap<String, RoomRecord> roomRecords = rooms.get(date);
 		if(roomRecords == null)
@@ -269,6 +281,9 @@ public class RSServant2 extends RSPOA{
 	@Override
 	public String cancelBookingHere(String bookingID, String id, String location) {
         String replicaServerAnswer = "";
+        String[] loca = location.split("!"); 
+    	location = loca[0];
+    	String sequenceint = loca[1];
         // Implement here
         HashMap<String, RoomRecord> roomRecords = rooms.get(bookingID.substring(4, 14));
 		if(roomRecords == null) {
