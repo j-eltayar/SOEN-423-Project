@@ -1,5 +1,6 @@
 package client;
 
+import java.util.Properties;
 import java.util.Scanner;
 
 import org.omg.CORBA.ORB;
@@ -126,7 +127,10 @@ public class Client
             System.out.println("\n\n\n====================  Login  ====================");
             System.out.print("Please enter your ID: ");
             String id = sc.next();
-            ORB orb = ORB.init(args, null);
+            Properties props = new Properties();
+            props.put("org.omg.CORBA.ORBInitialPort", "1050");
+            props.put("org.omg.CORBA.ORBInitialHost", "localhost");
+            ORB orb = ORB.init(args, props);
             Client client = new Client(id, id.substring(0, 3), orb);
             int permission = id.charAt(3);
             while (true) {

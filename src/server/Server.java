@@ -18,7 +18,11 @@ public class Server {
 	public static void main(String[] args) throws RemoteException {
 		
 		try {
-			ORB orb = ORB.init(args, null);
+
+			Properties props = new Properties();
+			props.put("org.omg.CORBA.ORBInitialPort", "1050");
+			props.put("org.omg.CORBA.ORBInitialHost", "localhost");
+			ORB orb = ORB.init(args, props);
 			
 			// Create Replica Managers
 			RMServant rmServantDVL = new RMServant("DVL", "KKL", "WST", "DVL1", "DVL2", "DVL3", "DVL4");
