@@ -1,7 +1,5 @@
 package killian.core;
 
-import javax.jws.WebMethod;
-import javax.jws.WebService;
 import javax.xml.ws.Endpoint;
 import java.io.IOException;
 import java.net.*;
@@ -28,19 +26,16 @@ public class CampusServerImpl implements CampusServer, Runnable {
             System.out.println("ERROR : " + e.getMessage());
             throw e;
         }
-        String url = "http://127.0.0.1:900" + this.campus.getIndex() + "/server/" + this.campus.name();
-        System.out.println("Creating endpoint at: " + url);
-        Endpoint ep = Endpoint.create(this);
-        ep.publish(url);
     }
 
     @Override
     public String createRoom(int roomNumber, Date date, TimeSlot[] timeSlots, String id) {
         try {
-            return this.database.addTimeSlot(date, roomNumber, timeSlots[0]);
+            this.database.addTimeSlot(date, roomNumber, timeSlots[0]);
+            return "CREATE ROOM (SUCCESS)";
         } catch (BookingException e) {
             System.out.println("ERROR : " + e.getMessage());
-            return "ERROR : " + e.getMessage();
+            return "CREATE ROOM (FAILURE)";
         }
     }
 
@@ -48,10 +43,11 @@ public class CampusServerImpl implements CampusServer, Runnable {
     public String deleteRoom(int roomNumber, Date date, TimeSlot[] timeSlots, String id) {
         Set<TimeSlot> timeSlotSet = new HashSet<>(Arrays.asList(timeSlots));
         try {
-            return this.database.deleteRoomRecords(date, roomNumber, timeSlotSet);
+            this.database.deleteRoomRecords(date, roomNumber, timeSlotSet);
+            return "DELETE ROOM (SUCCESS)";
         } catch (BookingException e) {
             System.out.println("ERROR : " + e.getMessage());
-            return "ERROR : " + e.getMessage();
+            return "DELETE ROOM (FAILURE)";
         }
     }
 
@@ -85,20 +81,20 @@ public class CampusServerImpl implements CampusServer, Runnable {
                 if (campusName.getIndex()  != this.campus.getIndex()) {
                     String response = sendRequest(campusName, message);
                     if (response.startsWith("ERROR")) {
-                        return response + "cannot book at this time since not all servers are up.";
+                        throw new BookingException("cannot book at this time since not all servers are up.");
                     } else {
                         bookingCount += Integer.parseInt(response);
                     }
                 }
             }
         } catch (Exception e) {
-            return "ERROR : " + e.getMessage();
+            return "BOOK ROOM (FAILURE)";
         }
 
         if (bookingCount < 3) {
             return doBooking(campus, roomNumber, date, timeSlot, id);
         } else {
-            return "ERROR : You have already reached max number of reservations";
+            return "BOOK ROOM (FAILURE)";
         }
     }
 
@@ -113,7 +109,7 @@ public class CampusServerImpl implements CampusServer, Runnable {
                 return this.database.makeBooking(date, roomNumber, timeSlot, id);
             } catch (BookingException e) {
                 System.out.println("ERROR : " + e.getMessage());
-                return "ERROR : " + e.getMessage();
+                return "BOOK ROOM (FAILURE)";
             }
         }
     }
@@ -128,15 +124,16 @@ public class CampusServerImpl implements CampusServer, Runnable {
                  campus = Campus.valueOf(campusName);
             } catch (IllegalArgumentException e) {
                 System.out.println("ERROR : " + e.getMessage());
-                return "ERROR : No campus of the reservation exists. " + e.getMessage();
+                return "CANCEL BOOKING (FAILURE)";
             }
             return sendRequest(campus, message);
         } else {
             try {
-                return this.database.cancelBooking(bookingID);
+                this.database.cancelBooking(bookingID);
+                return "CANCEL BOOKING (SUCCESS)";
             } catch (BookingException e) {
                 System.out.println("ERROR : " + e.getMessage());
-                return "ERROR : " + e.getMessage();
+                return "CANCEL BOOKING (FAILURE)";
             }
         }
     }
@@ -148,13 +145,13 @@ public class CampusServerImpl implements CampusServer, Runnable {
             String newBookingID = bookRoomResponse.split("\\s")[1];
             String cancelBookingResponse = cancelBooking(bookingID, id);
             if (cancelBookingResponse.startsWith("SUCCESS")) {
-                return newBookingID + " || your reservation was changed.";
+                return newBookingID;
             } else {
                 cancelBooking(newBookingID, id);
-                return "ERROR: cannot complete operation";
+                return "CHANGE RESERVATION (FAILURE)";
             }
         } else {
-            return "ERROR: cannot complete operation";
+            return "CHANGE RESERVATION (FAILURE)";
         }
     }
 

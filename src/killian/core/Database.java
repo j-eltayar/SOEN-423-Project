@@ -93,8 +93,9 @@ public class Database {
                 int count = studentReservationsCount.getOrDefault(studentID, 0);
                 bookingID = dates.get(date).get(roomNumber).get(timeSlot).bookRoom(campus.name(), studentID);
                 count++;
+                String altBookingID = campus.name() + "|" + date.toString() + "|" + roomNumber + "|" + timeSlot.getStart() + "|" + studentID;
                 studentReservationsCount.put(studentID, count);
-                return "SUCCESS " + bookingID;
+                return altBookingID;
             } catch (BookingException e) {
                 throw new BookingException(e.getMessage());
             }
