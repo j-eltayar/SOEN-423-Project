@@ -202,7 +202,7 @@ public class RSServant2 extends RSPOA{
 			}
 		}
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+        return replicaServerAnswer+"1";
 	}
 
 	@Override
@@ -225,7 +225,7 @@ public class RSServant2 extends RSPOA{
 		
 		}
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+        return replicaServerAnswer+"2";
 	}
 
 	@Override
@@ -240,18 +240,18 @@ public class RSServant2 extends RSPOA{
 		if(roomRecords == null) {
 			replicaServerAnswer = "BOOK ROOM (FAILURE)";
 			this.replicaManagerLog(replicaServerAnswer);
-	        return replicaServerAnswer;
+	        return replicaServerAnswer+"3";
 		}
 		RoomRecord rr = roomRecords.get(String.valueOf(roomNumber));
 		if(rr==null) {
 			replicaServerAnswer = "BOOK ROOM (FAILURE)";
 			this.replicaManagerLog(replicaServerAnswer);
-	        return replicaServerAnswer;
+	        return replicaServerAnswer+"3";
 			
 		}
 		replicaServerAnswer = rr.setBooked(timeslot, id);
-        this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+        this.replicaManagerLog(replicaServerAnswer+"3");
+        return replicaServerAnswer+"3";
 	}
 
 	@Override
@@ -263,7 +263,7 @@ public class RSServant2 extends RSPOA{
         // Implement here
         HashMap<String, RoomRecord> roomRecords = rooms.get(date);
 		if(roomRecords == null)
-			return "0";
+			return "0"+"4";
 		int counter = 0;
 		
 		Collection times = roomRecords.values();
@@ -273,7 +273,7 @@ public class RSServant2 extends RSPOA{
 			counter += ((RoomRecord) rr).getAvailableTimes();
 		}
 		this.replicaManagerLog(replicaServerAnswer);
-		return String.valueOf(counter);
+		return String.valueOf(counter)+"4";
        
         
 	}
@@ -290,7 +290,7 @@ public class RSServant2 extends RSPOA{
 			
 			replicaServerAnswer = "CANCEL BOOKING (FAILURE)";
 			this.replicaManagerLog(replicaServerAnswer);
-	        return replicaServerAnswer;
+	        return replicaServerAnswer+"5";
 			
 		} 
 		RoomRecord rr = roomRecords.get(bookingID.substring(15,18));
@@ -299,10 +299,10 @@ public class RSServant2 extends RSPOA{
 			
 			replicaServerAnswer = "CANCEL BOOKING (FAILURE)";
 			this.replicaManagerLog(replicaServerAnswer);
-	        return replicaServerAnswer;
+	        return replicaServerAnswer+"5";
 		}
 		this.replicaManagerLog(replicaServerAnswer);
-		return rr.cancelBooking(bookingID);
+		return rr.cancelBooking(bookingID)+"5";
        
         
 	}

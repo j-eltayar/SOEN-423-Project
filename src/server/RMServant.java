@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.Optional;
 
 /*
  *	Replica Manager Class: Layer of abstraction before communication with the replica servers that store the actual infromation and preform the actual
@@ -48,6 +49,13 @@ public class RMServant extends RMPOA {
 	// Getter for the orb of this servant
 	public ORB getORB() {
 		return this.orb;
+	}
+	
+	public static String removeLastCharOptional(String s) {
+	    return Optional.ofNullable(s)
+	      .filter(str -> str.length() != 0)
+	      .map(str -> str.substring(0, str.length() - 1))
+	      .orElse(s);
 	}
 	
 	public String setRMServers() {
@@ -144,7 +152,24 @@ public class RMServant extends RMPOA {
 	public String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
     {
         String replicaManagerAnswer = "";
-        replicaManagerAnswer = validateResponseString(RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1"), RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1") , RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1"), RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1"));
+        
+        String RSOneComp = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1");
+        String RSOneRes = removeLastCharOptional(RSOneComp);
+        String RSOneSeq = RSOneComp.substring(RSOneComp.length() - 1);
+        
+        String RSTwoComp = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1");
+        String RSTwoRes =  removeLastCharOptional(RSTwoComp);
+        String RSTwoSeq = RSTwoComp.substring(RSTwoComp.length() - 1);
+        
+        String RSThreeComp = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1");
+        String RSThreeRes = removeLastCharOptional(RSThreeComp);
+        String RSThreeSeq = RSThreeComp.substring(RSThreeComp.length() - 1);
+        
+        String RSFourComp =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!1");
+        String RSFourRes = removeLastCharOptional(RSFourComp);
+        String RSFourSeq = RSFourComp.substring(RSFourComp.length() - 1);
+        
+        replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -153,7 +178,24 @@ public class RMServant extends RMPOA {
     @Override
     public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String id, String location) {
         String replicaManagerAnswer = "";
-        replicaManagerAnswer = validateResponseString(RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2"), RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2"), RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2"), RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2"));
+        
+        String RSOneComp = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2");
+        String RSOneRes = removeLastCharOptional(RSOneComp);
+        String RSOneSeq = RSOneComp.substring(RSOneComp.length() - 1);
+        
+        String RSTwoComp = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2");
+        String RSTwoRes =  removeLastCharOptional(RSTwoComp);
+        String RSTwoSeq = RSTwoComp.substring(RSTwoComp.length() - 1);
+        
+        String RSThreeComp = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2");
+        String RSThreeRes = removeLastCharOptional(RSThreeComp);
+        String RSThreeSeq = RSThreeComp.substring(RSThreeComp.length() - 1);
+        
+        String RSFourComp = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!2");
+        String RSFourRes = removeLastCharOptional(RSFourComp);
+        String RSFourSeq = RSFourComp.substring(RSFourComp.length() - 1);
+        
+        replicaManagerAnswer = validateResponseString(RSOneSeq, RSTwoSeq, RSThreeSeq, RSFourRes);
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -167,7 +209,23 @@ public class RMServant extends RMPOA {
     public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
         String replicaManagerAnswer = "";
         if(location.contentEquals(replicaManagerName)) {
-        	replicaManagerAnswer = validateResponseString(RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3"), RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3"), RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3"), RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3"));
+        	String RSOneComp = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3");
+            String RSOneRes = removeLastCharOptional(RSOneComp);
+            String RSOneSeq = RSOneComp.substring(RSOneComp.length() - 1);
+            
+            String RSTwoComp = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3");
+            String RSTwoRes =  removeLastCharOptional(RSTwoComp);
+            String RSTwoSeq = RSTwoComp.substring(RSTwoComp.length() - 1);
+            
+            String RSThreeComp = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3");
+            String RSThreeRes = removeLastCharOptional(RSThreeComp);
+            String RSThreeSeq = RSThreeComp.substring(RSThreeComp.length() - 1);
+            
+            String RSFourComp = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!3");
+            String RSFourRes = removeLastCharOptional(RSFourComp);
+            String RSFourSeq = RSFourComp.substring(RSFourComp.length() - 1);
+        	
+        	replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         }
         else if(location.contentEquals(RMOneName)) {
         	replicaManagerAnswer = RMOne.bookRoom(campusName, roomNumber, date, timeslot, id, location);
@@ -187,7 +245,24 @@ public class RMServant extends RMPOA {
     public String getAvailableTimeSlot(String date, String id, String location) {
         String replicaManagerAnswer = "";
         String answerHere = "";
-        answerHere = validateResponseString(RSOne.getAvailableTimeSlotHere(date, id, location+"!4"), RSTwo.getAvailableTimeSlotHere(date, id, location+"!4"), RSThree.getAvailableTimeSlotHere(date, id, location+"!4"), RSFour.getAvailableTimeSlotHere(date, id, location+"!4"));
+        
+        String RSOneComp = RSOne.getAvailableTimeSlotHere(date, id, location+"!4");
+        String RSOneRes = removeLastCharOptional(RSOneComp);
+        String RSOneSeq = RSOneComp.substring(RSOneComp.length() - 1);
+        
+        String RSTwoComp = RSTwo.getAvailableTimeSlotHere(date, id, location+"!4");
+        String RSTwoRes =  removeLastCharOptional(RSTwoComp);
+        String RSTwoSeq = RSTwoComp.substring(RSTwoComp.length() - 1);
+        
+        String RSThreeComp = RSThree.getAvailableTimeSlotHere(date, id, location+"!4");
+        String RSThreeRes = removeLastCharOptional(RSThreeComp);
+        String RSThreeSeq = RSThreeComp.substring(RSThreeComp.length() - 1);
+        
+        String RSFourComp = RSFour.getAvailableTimeSlotHere(date, id, location+"!4");
+        String RSFourRes = removeLastCharOptional(RSFourComp);
+        String RSFourSeq = RSFourComp.substring(RSFourComp.length() - 1);
+        
+        answerHere = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         if(location.contentEquals(replicaManagerName)) {
         	replicaManagerAnswer = replicaManagerName + ":" + answerHere + "|" + RMOne.getAvailableTimeSlot(date, id, location) + ":" + answerHere + "|" + RMTwo.getAvailableTimeSlot(date, id, location);
         }
@@ -206,8 +281,25 @@ public class RMServant extends RMPOA {
     @Override
     public String cancelBooking(String bookingID, String id, String location) {
         String replicaManagerAnswer = "";
+        
+        String RSOneComp = RSOne.cancelBookingHere(bookingID, id, location+"!4");
+        String RSOneRes = removeLastCharOptional(RSOneComp);
+        String RSOneSeq = RSOneComp.substring(RSOneComp.length() - 1);
+        
+        String RSTwoComp = RSTwo.cancelBookingHere(bookingID, id, location+"!4");
+        String RSTwoRes =  removeLastCharOptional(RSTwoComp);
+        String RSTwoSeq = RSTwoComp.substring(RSTwoComp.length() - 1);
+        
+        String RSThreeComp = RSThree.cancelBookingHere(bookingID, id, location+"!4");
+        String RSThreeRes = removeLastCharOptional(RSThreeComp);
+        String RSThreeSeq = RSThreeComp.substring(RSThreeComp.length() - 1);
+        
+        String RSFourComp = RSFour.cancelBookingHere(bookingID, id, location+"!4");
+        String RSFourRes = removeLastCharOptional(RSFourComp);
+        String RSFourSeq = RSFourComp.substring(RSFourComp.length() - 1);
+        
         if(location.contentEquals(replicaManagerName)) {
-        	replicaManagerAnswer = validateResponseString(RSOne.cancelBookingHere(bookingID, id, location+"!4"), RSTwo.cancelBookingHere(bookingID, id, location+"!4"), RSThree.cancelBookingHere(bookingID, id, location+"!4"), RSFour.cancelBookingHere(bookingID, id, location+"!4"));
+        	replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         }
         else if(location.contentEquals(RMOneName)) {
         	replicaManagerAnswer = RMOne.cancelBooking(bookingID, id, location);

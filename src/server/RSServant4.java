@@ -130,7 +130,7 @@ public class RSServant4 extends RSPOA {
 		}
 
 		this.replicaManagerLog(replicaServerAnswer);
-		return replicaServerAnswer;
+		return replicaServerAnswer+"1";
 	}
 
 	@Override
@@ -168,7 +168,7 @@ public class RSServant4 extends RSPOA {
 		}
 
 		this.replicaManagerLog(replicaServerAnswer);
-		return replicaServerAnswer;
+		return replicaServerAnswer+"2";
 	}
 
 	@Override
@@ -203,7 +203,7 @@ public class RSServant4 extends RSPOA {
 		}
 			
 		this.replicaManagerLog("BOOK ROOM (SUCCESS)"+ replicaServerAnswer);
-		return replicaServerAnswer;
+		return replicaServerAnswer+"3";
 	}
 
 	@Override
@@ -222,9 +222,9 @@ public class RSServant4 extends RSPOA {
 				}
 			
 		}
-		
+		replicaServerAnswer = String.valueOf(availableSlots);
 		this.replicaManagerLog("Slots here: " + replicaServerAnswer);
-		return replicaServerAnswer;
+		return replicaServerAnswer+"4";
 	}
 
 	@Override
@@ -258,7 +258,7 @@ public class RSServant4 extends RSPOA {
 		}
 
 		this.replicaManagerLog(replicaServerAnswer);
-		return replicaServerAnswer;
+		return replicaServerAnswer+"5";
 	}
 
 	@Override

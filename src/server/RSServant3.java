@@ -91,7 +91,7 @@ public class RSServant3 extends RSPOA{
 		replicaServerAnswer = server.createRoom(roomNumber, roomDate, timeSlots, id);
 
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+        return replicaServerAnswer+"1";
 	}
 
 	private Date getDate(String date) {
@@ -125,7 +125,7 @@ public class RSServant3 extends RSPOA{
 		replicaServerAnswer = server.deleteRoom(roomNumber, roomDate, timeSlots, id);
 
 		this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+        return replicaServerAnswer+"2";
 	}
 
 	@Override
@@ -139,7 +139,7 @@ public class RSServant3 extends RSPOA{
 		replicaServerAnswer = server.bookRoom(Campus.valueOf(campusName), roomNumber, roomDate, timeSlot, id);
 
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+        return replicaServerAnswer+"3";
 	}
 
 	@Override
@@ -153,7 +153,7 @@ public class RSServant3 extends RSPOA{
 		replicaServerAnswer = server.getAvailableTimeSlot(roomDate, id);
 
 		this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+        return replicaServerAnswer+"4";
 	}
 
 	@Override
@@ -166,7 +166,7 @@ public class RSServant3 extends RSPOA{
 		replicaServerAnswer = server.cancelBooking(bookingID, id);
 
 		this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+        return replicaServerAnswer+"5";
 	}
 
 	@Override
