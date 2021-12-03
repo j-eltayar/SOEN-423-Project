@@ -5,7 +5,7 @@ import org.omg.CosNaming.*;
 import org.omg.CosNaming.NamingContextPackage.*;
 import org.omg.CORBA.*;
 import org.omg.PortableServer.*;
-import org.omg.PortableServer.POA;
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -71,7 +71,29 @@ public class RMServant extends RMPOA {
 	}
 	
 	public void handleCrash(int i) {
-		String s = "f";
+		
+		try {
+			RSServant1 newRS = new RSServant1("DVL5");
+			newRS.handleError(this.methodCalls);
+			newRS.setORB(this.orb);
+			POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+			rootpoa.the_POAManager().activate();	
+			org.omg.CORBA.Object refNewRS = rootpoa.servant_to_reference(newRS);
+			RS hrefNewRS = RSHelper.narrow(refNewRS);
+			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
+			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
+			NameComponent pathRSNew[] = ncRef.to_name(this.replicaManagerName+i);
+			ncRef.rebind(pathRSNew, hrefNewRS);
+			this.setRSServers();
+			String s = "f";
+			
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
 	}
 	
 	
@@ -111,10 +133,30 @@ public class RMServant extends RMPOA {
 			// Use NamingContextExt instead of NamingContext. This is part of the Interoperable naming Service.
 			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
 			// resolve the Object Reference in Naming
+			try {
+				RSServant1 newRS = new RSServant1("DVL5");
+				newRS.handleError(this.methodCalls);
+				newRS.setORB(this.orb);
+				POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
+				rootpoa.the_POAManager().activate();	
+				org.omg.CORBA.Object refNewRS = rootpoa.servant_to_reference(newRS);
+				RS hrefNewRS = RSHelper.narrow(refNewRS);
+				
+				NameComponent pathRSNew[] = ncRef.to_name("DVL2");
+				ncRef.rebind(pathRSNew, hrefNewRS);
+				
+				
+			} catch (Exception e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			
 			RSOne = RSHelper.narrow(ncRef.resolve_str(RSOneName));
 			RSTwo = RSHelper.narrow(ncRef.resolve_str(RSTwoName));
 			RSThree = RSHelper.narrow(ncRef.resolve_str(RSThreeName));
 			RSFour = RSHelper.narrow(ncRef.resolve_str(RSFourName));
+			System.out.println(RSTwo.sayHello());
+			
 		} 		
 		catch (Exception e) {		
 				

@@ -40,6 +40,7 @@ public class Server {
 			RSServant2 rsServantDVL3 = new RSServant2("DVL3");
 			RSServant1 rsServantDVL4 = new RSServant1("DVL4");
 			
+			
 			// Create KKL Replica Servers
 			RSServant1 rsServantKKL1 = new RSServant1("KKL1");
 			RSServant2 rsServantKKL2 = new RSServant2("KKL2");
