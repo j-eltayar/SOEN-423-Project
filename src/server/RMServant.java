@@ -172,32 +172,36 @@ public class RMServant extends RMPOA {
     	
     	while (System.currentTimeMillis() < end) {
     		if(RSOneRes==null){
-    			if(replicaErrorCount[0]==3) {
+    			if(replicaErrorCount[0]>=3) {
     				handleError(RSOne);
+    				replicaErrorCount[0]=0;
     			}
     			else {
     				RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     			}
     		}
     		if(RSTwoRes == null){
-    			if(replicaErrorCount[1]==3) {
+    			if(replicaErrorCount[1]>=3) {
     				handleError(RSTwo);
+    				replicaErrorCount[1]=0;
     			}
     			else {
     				RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     			}
     		}
     		if(RSThreeRes == null) {
-    			if(replicaErrorCount[2]==3) {
+    			if(replicaErrorCount[2]>=3) {
     				handleError(RSThree);
+    				replicaErrorCount[2]=0;
     			}
     			else {
     				RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     			}	
     		}
     		if(RSFourRes == null){
-    			if(replicaErrorCount[3]==3) {
+    			if(replicaErrorCount[3]>=3) {
     				handleError(RSFour);
+    				replicaErrorCount[3]=0;
     			}
     			else {
     				RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
@@ -238,32 +242,36 @@ public class RMServant extends RMPOA {
     	
     	while (System.currentTimeMillis() < end) {
     		if(RSOneRes==null){
-    			if(replicaErrorCount[0]==3) {
+    			if(replicaErrorCount[0]>=3) {
     				handleError(RSOne);
+    				replicaErrorCount[0]=0;
     			}
     			else {
     				RSOneRes = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);    
     			}
     		}
     		if(RSTwoRes == null){
-    			if(replicaErrorCount[1]==3) {
+    			if(replicaErrorCount[1]>=3) {
     				handleError(RSTwo);
+    				replicaErrorCount[1]=0;
     			}
     			else {
     				RSTwoRes = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
     			}
     		}
     		if(RSThreeRes == null) {
-    			if(replicaErrorCount[2]==3) {
+    			if(replicaErrorCount[2]>=3) {
     				handleError(RSThree);
+    				replicaErrorCount[2]=0;
     			}
     			else {
     				RSThreeRes = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
     			}	
     		}
     		if(RSFourRes == null){
-    			if(replicaErrorCount[3]==3) {
+    			if(replicaErrorCount[3]>=3) {
     				handleError(RSFour);
+    				replicaErrorCount[3]=0;
     			}
     			else {
     				RSFourRes = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
@@ -315,32 +323,36 @@ public class RMServant extends RMPOA {
         	
         	while (System.currentTimeMillis() < end) {
         		if(RSOneRes==null){
-        			if(replicaErrorCount[0]==3) {
+        			if(replicaErrorCount[0]>=3) {
         				handleError(RSOne);
+        				replicaErrorCount[0]=0;
         			}
         			else {
         				RSOneRes = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);    
         			}
         		}
         		if(RSTwoRes == null){
-        			if(replicaErrorCount[1]==3) {
+        			if(replicaErrorCount[1]>=3) {
         				handleError(RSTwo);
+        				replicaErrorCount[1]=0;
         			}
         			else {
         				RSTwoRes = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
         			}
         		}
         		if(RSThreeRes == null) {
-        			if(replicaErrorCount[2]==3) {
+        			if(replicaErrorCount[2]>=3) {
         				handleError(RSThree);
+        				replicaErrorCount[2]=0;
         			}
         			else {
         				RSThreeRes = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
         			}	
         		}
         		if(RSFourRes == null){
-        			if(replicaErrorCount[3]==3) {
+        			if(replicaErrorCount[3]>=3) {
         				handleError(RSFour);
+        				replicaErrorCount[3]=0;
         			}
         			else {
         				RSFourRes = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
@@ -392,32 +404,36 @@ public class RMServant extends RMPOA {
     	
     	while (System.currentTimeMillis() < end) {
     		if(RSOneRes==null){
-    			if(replicaErrorCount[0]==3) {
+    			if(replicaErrorCount[0]>=3) {
     				handleError(RSOne);
+    				replicaErrorCount[0]=0;
     			}
     			else {
     				RSOneRes = RSOne.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
     			}
     		}
     		if(RSTwoRes == null){
-    			if(replicaErrorCount[1]==3) {
+    			if(replicaErrorCount[1]>=3) {
     				handleError(RSTwo);
+    				replicaErrorCount[1]=0;
     			}
     			else {
     			    RSTwoRes = RSTwo.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
     			}
     		}
     		if(RSThreeRes == null) {
-    			if(replicaErrorCount[2]==3) {
+    			if(replicaErrorCount[2]>=3) {
     				handleError(RSThree);
+    				replicaErrorCount[2]=0;
     			}
     			else {
     			    RSThreeRes = RSThree.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
     			}	
     		}
     		if(RSFourRes == null){
-    			if(replicaErrorCount[3]==3) {
+    			if(replicaErrorCount[3]>=3) {
     				handleError(RSFour);
+    				replicaErrorCount[3]=0;
     			}
     			else {
     			    RSFourRes = RSFour.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
@@ -471,32 +487,36 @@ public class RMServant extends RMPOA {
         	
         	while (System.currentTimeMillis() < end) {
         		if(RSOneRes==null){
-        			if(replicaErrorCount[0]==3) {
+        			if(replicaErrorCount[0]>=3) {
         				handleError(RSOne);
+        				replicaErrorCount[0]=0;
         			}
         			else {
                 		RSOneRes = RSOne.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);         
         			}
         		}
         		if(RSTwoRes == null){
-        			if(replicaErrorCount[1]==3) {
+        			if(replicaErrorCount[1]>=3) {
         				handleError(RSTwo);
+        				replicaErrorCount[1]=0;
         			}
         			else {
                         RSTwoRes = RSTwo.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);          
         			}
         		}
         		if(RSThreeRes == null) {
-        			if(replicaErrorCount[2]==3) {
+        			if(replicaErrorCount[2]>=3) {
         				handleError(RSThree);
+        				replicaErrorCount[2]=0;
         			}
         			else {
                         RSThreeRes = RSThree.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
         			}	
         		}
         		if(RSFourRes == null){
-        			if(replicaErrorCount[3]==3) {
+        			if(replicaErrorCount[3]>=3) {
         				handleError(RSFour);
+        				replicaErrorCount[3]=0;
         			}
         			else {
                         RSFourRes = RSFour.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
