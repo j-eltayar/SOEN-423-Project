@@ -136,22 +136,14 @@ public class Client
             while (true) {
                 if (65 == permission) {
                     System.out.println("\n\n\n====================  Admin Main Menu  ====================");
-                    System.out.println("[0] Test Run");
                     System.out.println("[1] Create Room");
                     System.out.println("[2] Delete Room");
-                    System.out.println("[3] Exit");
+                    System.out.println("[3] Test Run Admin");
+                    System.out.println("[4] Test Run Student");
+                    System.out.println("[5] Test Run Server Failures");
+                    System.out.println("[6] Exit");
                     System.out.print("Select one from the above options: ");
                     int option = sc.nextInt();
-                    if (option == 0) {
-                    	
-                        // Implement test here
-                    System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
-                    System.out.println(client.createRoom(101, "04-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));	
-                    System.out.println(client.createRoom(101, "05-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));	
-                    System.out.println(client.createRoom(101, "06-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));	
-                    
-                    
-                    }
                     if (option == 1) {
                         System.out.print("Enter Room Number: ");
                         int selectedRoomNBCreate = sc.nextInt();
@@ -192,8 +184,17 @@ public class Client
                         }
                         System.out.println(client.deleteRoom(selectedRoomNBDelete, selectedDateDelete, listEntry, client.getLocation()));
                     }
+                    else if (option == 3) {
+
+                    }
+                    else if (option == 4) {
+
+                    }
+                    else if (option == 5) {
+
+                    }
                     else {
-                        if (option != 3) {
+                        if (option != 6) {
                             continue;
                         }
                         System.out.print("\nGoodbye!\n");

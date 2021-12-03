@@ -216,7 +216,7 @@ public class RSServant2 extends RSPOA{
 			HashMap<String, RoomRecord> rrs = new HashMap<String, RoomRecord>();
 			rrs.put(String.valueOf(roomNumber), rr);
 			rooms.put(date, rrs);
-			replicaServerAnswer = "CREATE ROOM (SUCCES)";
+			replicaServerAnswer = "CREATE ROOM (SUCCESS)";
 		
 		}
 		else if(rooms.get(date).get(roomNumber)==null){
@@ -231,7 +231,7 @@ public class RSServant2 extends RSPOA{
 			if(response == 0) {
 				replicaServerAnswer = "CREATE ROOM (FAILURE)";
 			} else {
-				replicaServerAnswer = "CREATE ROOM (SUCCES)";
+				replicaServerAnswer = "CREATE ROOM (SUCCESS)";
 			}
 		}
         this.replicaManagerLog(replicaServerAnswer);
