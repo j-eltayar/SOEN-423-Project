@@ -73,8 +73,10 @@ public class RMServant extends RMPOA {
 	public void handleCrash(int i) {
 		
 		try {
-			RSServant1 newRS = new RSServant1("DVL5");
-			newRS.handleError(this.methodCalls);
+			RSServant1 newRS = new RSServant1(this.replicaManagerName+i);
+			if(this.methodCalls!=null) {
+				newRS.handleError(this.methodCalls);
+			}
 			newRS.setORB(this.orb);
 			POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
 			rootpoa.the_POAManager().activate();	
@@ -85,14 +87,13 @@ public class RMServant extends RMPOA {
 			NameComponent pathRSNew[] = ncRef.to_name(this.replicaManagerName+i);
 			ncRef.rebind(pathRSNew, hrefNewRS);
 			this.setRSServers();
-			String s = "f";
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
-		
+		RSTwo.sayHello();
 		
 	}
 	
@@ -132,29 +133,13 @@ public class RMServant extends RMPOA {
 			org.omg.CORBA.Object objRef = orb.resolve_initial_references("NameService");
 			// Use NamingContextExt instead of NamingContext. This is part of the Interoperable naming Service.
 			NamingContextExt ncRef = NamingContextExtHelper.narrow(objRef);
-			// resolve the Object Reference in Naming
-			try {
-				RSServant1 newRS = new RSServant1("DVL5");
-				newRS.handleError(this.methodCalls);
-				newRS.setORB(this.orb);
-				POA rootpoa = POAHelper.narrow(orb.resolve_initial_references("RootPOA"));
-				rootpoa.the_POAManager().activate();	
-				org.omg.CORBA.Object refNewRS = rootpoa.servant_to_reference(newRS);
-				RS hrefNewRS = RSHelper.narrow(refNewRS);
-				
-				NameComponent pathRSNew[] = ncRef.to_name("DVL2");
-				ncRef.rebind(pathRSNew, hrefNewRS);
-				
-				
-			} catch (Exception e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			
+			// resolve the Object Reference in Naming	
+
 			RSOne = RSHelper.narrow(ncRef.resolve_str(RSOneName));
 			RSTwo = RSHelper.narrow(ncRef.resolve_str(RSTwoName));
 			RSThree = RSHelper.narrow(ncRef.resolve_str(RSThreeName));
 			RSFour = RSHelper.narrow(ncRef.resolve_str(RSFourName));
+
 			System.out.println(RSTwo.sayHello());
 			
 		} 		
@@ -238,8 +223,8 @@ public class RMServant extends RMPOA {
         				RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[0]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(1);
+            			this.replicaManagerLog("Handling crash on->"+1);
     				}
     			}
     		}
@@ -256,8 +241,8 @@ public class RMServant extends RMPOA {
         				RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[1]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(2);
+            			this.replicaManagerLog("Handling crash on->"+2);
     				}
     			}
     		}
@@ -275,8 +260,8 @@ public class RMServant extends RMPOA {
         				RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[2]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(3);
+            			this.replicaManagerLog("Handling crash on->"+3);
     				}
     			}	
     		}
@@ -291,8 +276,8 @@ public class RMServant extends RMPOA {
         				RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[3]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(4);
+            			this.replicaManagerLog("Handling crash on->"+4);
     				}
     			}	
     		}
@@ -310,6 +295,7 @@ public class RMServant extends RMPOA {
     		}
     		else {
     			handleCrash(i);
+    			this.replicaManagerLog("Handling crash on->"+i);
     		}
     	}
     	this.replicaManagerLog("end->"+intArrayToString(replicaErrorCount));
@@ -341,8 +327,8 @@ public class RMServant extends RMPOA {
         				RSOneRes = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);    
     				}
     				catch(Error e){
-            			replicaErrorCount[0]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(1);
+            			this.replicaManagerLog("Handling crash on->"+1);
     				}
     			}
     		}
@@ -357,8 +343,8 @@ public class RMServant extends RMPOA {
         				RSTwoRes = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[1]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(2);
+            			this.replicaManagerLog("Handling crash on->"+2);
     				}
     			}
     		}
@@ -373,8 +359,8 @@ public class RMServant extends RMPOA {
         				RSThreeRes = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[2]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(3);
+            			this.replicaManagerLog("Handling crash on->"+3);
     				}
     			}	
     		}
@@ -389,8 +375,8 @@ public class RMServant extends RMPOA {
         				RSFourRes = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[3]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(4);
+            			this.replicaManagerLog("Handling crash on->"+4);
     				}
     			}	
     		}
@@ -413,8 +399,8 @@ public class RMServant extends RMPOA {
     			continue;
     		}
     		else {
-    			replicaErrorCount[i]++;
-    			this.replicaManagerLog(intArrayToString(replicaErrorCount));
+    			handleCrash(i);
+    			this.replicaManagerLog("Handling crash on->"+i);
     		}
     	}
     	
@@ -451,8 +437,8 @@ public class RMServant extends RMPOA {
             				RSOneRes = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);    
         				}
         				catch(Error e){
-                			replicaErrorCount[0]++;
-        					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+                			handleCrash(1);
+                			this.replicaManagerLog("Handling crash on->"+1);
         				}
         			}
         		}
@@ -467,8 +453,8 @@ public class RMServant extends RMPOA {
             				RSTwoRes = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
         				}
         				catch(Error e){
-                			replicaErrorCount[1]++;
-        					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+                			handleCrash(2);
+                			this.replicaManagerLog("Handling crash on->"+2);
         				}
         			}
         		}
@@ -483,8 +469,8 @@ public class RMServant extends RMPOA {
             				RSThreeRes = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
         				}
         				catch(Error e){
-                			replicaErrorCount[2]++;
-        					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+                			handleCrash(3);
+                			this.replicaManagerLog("Handling crash on->"+3);
         				}
         			}	
         		}
@@ -499,8 +485,8 @@ public class RMServant extends RMPOA {
             				RSFourRes = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
         				}
         				catch(Error e){
-                			replicaErrorCount[3]++;
-        					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+                			handleCrash(4);
+                			this.replicaManagerLog("Handling crash on->"+4);
         				}
         			}	
         		}
@@ -517,8 +503,8 @@ public class RMServant extends RMPOA {
         			continue;
         		}
         		else {
-        			replicaErrorCount[i]++;
-        			this.replicaManagerLog(intArrayToString(replicaErrorCount));
+        			handleCrash(i);
+        			this.replicaManagerLog("Handling crash on->"+i);
         		}
         	}
 
@@ -561,8 +547,8 @@ public class RMServant extends RMPOA {
         				RSOneRes = RSOne.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[0]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(1);
+            			this.replicaManagerLog("Handling crash on->"+1);
     				}
     			}
     		}
@@ -577,8 +563,8 @@ public class RMServant extends RMPOA {
         			    RSTwoRes = RSTwo.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[1]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(2);
+            			this.replicaManagerLog("Handling crash on->"+2);
     				}
     			}
     		}
@@ -593,8 +579,8 @@ public class RMServant extends RMPOA {
         			    RSThreeRes = RSThree.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[2]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(3);
+            			this.replicaManagerLog("Handling crash on->"+3);
     				}
     			}	
     		}
@@ -609,8 +595,8 @@ public class RMServant extends RMPOA {
         			    RSFourRes = RSFour.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
     				}
     				catch(Error e){
-            			replicaErrorCount[3]++;
-    					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+            			handleCrash(4);
+            			this.replicaManagerLog("Handling crash on->"+4);
     				}
     			}	
     		} 
@@ -627,8 +613,8 @@ public class RMServant extends RMPOA {
     			continue;
     		}
     		else {
-    			replicaErrorCount[i]++;
-    			this.replicaManagerLog(intArrayToString(replicaErrorCount));
+    			handleCrash(i);
+    			this.replicaManagerLog("Handling crash on->"+i);
     		}
     	}
         
@@ -673,8 +659,8 @@ public class RMServant extends RMPOA {
         					RSOneRes = RSOne.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);      
         				}
         				catch(Error e){
-                			replicaErrorCount[0]++;
-        					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+                			handleCrash(1);
+                			this.replicaManagerLog("Handling crash on->"+1);
         				}                		   
         			}
         		}
@@ -689,8 +675,8 @@ public class RMServant extends RMPOA {
         					RSTwoRes = RSTwo.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);          
         				}
         				catch(Error e){
-                			replicaErrorCount[1]++;
-        					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+                			handleCrash(2);
+                			this.replicaManagerLog("Handling crash on->"+2);
         				}
         			}
         		}
@@ -705,8 +691,8 @@ public class RMServant extends RMPOA {
                             RSThreeRes = RSThree.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
         				}
         				catch(Error e){
-                			replicaErrorCount[2]++;
-        					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+                			handleCrash(3);
+                			this.replicaManagerLog("Handling crash on->"+3);
         				}
         			}	
         		}
@@ -721,8 +707,8 @@ public class RMServant extends RMPOA {
                             RSFourRes = RSFour.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
         				}
         				catch(Error e){
-                			replicaErrorCount[3]++;
-        					this.replicaManagerLog(intArrayToString(replicaErrorCount));
+                			handleCrash(4);
+                			this.replicaManagerLog("Handling crash on->"+4);
         				}
         			}	
         		}     
@@ -739,8 +725,8 @@ public class RMServant extends RMPOA {
         			continue;
         		}
         		else {
-        			replicaErrorCount[i]++;
-        			this.replicaManagerLog(intArrayToString(replicaErrorCount));
+        			handleCrash(i);
+        			this.replicaManagerLog("Handling crash on->"+i);
         		}
         	}
             
