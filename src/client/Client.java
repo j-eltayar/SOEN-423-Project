@@ -215,10 +215,17 @@ public class Client
                     	System.out.println(client.deleteRoom(101, "03-14-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
                     }
                     else if (option == 4) {
-                    	
+                    	System.out.println(client.createRoom(101, "02-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.bookRoom(client.getLocation(), 101, "02-14-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.cancelBooking("", "TEST"));
+                    	System.out.println(client.bookRoom(client.getLocation(), 101, "02-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.bookRoom(client.getLocation(), 101, "02-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
                     }
                     else if (option == 5) {
-
+                    	System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
                     }
                     else {
                         if (option != 6) {
