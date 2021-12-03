@@ -70,6 +70,11 @@ public class RMServant extends RMPOA {
 		rs.createRoomHere(-1, methodCalls,s,s,s);
 	}
 	
+	public void handleCrash(int i) {
+		String s = "f";
+	}
+	
+	
 	public String setRMServers() {
 		try {
 			// get the root naming context
@@ -262,8 +267,7 @@ public class RMServant extends RMPOA {
     			continue;
     		}
     		else {
-    			replicaErrorCount[i]++;
-    			this.replicaManagerLog(intArrayToString(replicaErrorCount));
+    			handleCrash(i);
     		}
     	}
     	this.replicaManagerLog("end->"+intArrayToString(replicaErrorCount));

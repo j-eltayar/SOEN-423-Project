@@ -14,6 +14,10 @@ import java.rmi.RemoteException;
 import java.util.Properties;
 
 public class Server {
+	
+	public void run() {
+		
+	};
 
 	public static void main(String[] args) throws RemoteException {
 		
