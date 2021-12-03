@@ -162,7 +162,7 @@ public class RMServant extends RMPOA {
 	// Create Room method. Create a room in all replicas. 
     @Override
 	public String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
-    {
+    {	
         String replicaManagerAnswer = "";
         sequenceNUM++;
         addMethodCall("createRoom;"+roomNumber+";"+date+";"+List_Of_Time_Slots+";"+id+";"+location);
@@ -172,16 +172,36 @@ public class RMServant extends RMPOA {
     	
     	while (System.currentTimeMillis() < end) {
     		if(RSOneRes==null){
-    			RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			if(replicaErrorCount[0]==3) {
+    				handleError(RSOne);
+    			}
+    			else {
+    				RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}
     		}
     		if(RSTwoRes == null){
-    			RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			if(replicaErrorCount[1]==3) {
+    				handleError(RSTwo);
+    			}
+    			else {
+    				RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}
     		}
     		if(RSThreeRes == null) {
-    			RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			if(replicaErrorCount[2]==3) {
+    				handleError(RSThree);
+    			}
+    			else {
+    				RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}	
     		}
     		if(RSFourRes == null){
-    			RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			if(replicaErrorCount[3]==3) {
+    				handleError(RSFour);
+    			}
+    			else {
+    				RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}	
     		}
             if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
             	if(this.worstTime<(System.currentTimeMillis() - start)) {
@@ -218,16 +238,43 @@ public class RMServant extends RMPOA {
     	
     	while (System.currentTimeMillis() < end) {
     		if(RSOneRes==null){
-    			RSOneRes = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);        		}
+    			if(replicaErrorCount[0]==3) {
+    				handleError(RSOne);
+    			}
+    			else {
+    				RSOneRes = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);    
+    			}
+    		}
     		if(RSTwoRes == null){
-                RSTwoRes = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			if(replicaErrorCount[1]==3) {
+    				handleError(RSTwo);
+    			}
+    			else {
+    				RSTwoRes = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}
     		}
     		if(RSThreeRes == null) {
-                RSThreeRes = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			if(replicaErrorCount[2]==3) {
+    				handleError(RSThree);
+    			}
+    			else {
+    				RSThreeRes = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}	
     		}
     		if(RSFourRes == null){
-                RSFourRes = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			if(replicaErrorCount[3]==3) {
+    				handleError(RSFour);
+    			}
+    			else {
+    				RSFourRes = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}	
     		}
+            if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+            	if(this.worstTime<(System.currentTimeMillis() - start)) {
+            		this.worstTime = System.currentTimeMillis() - start;
+            	}
+            	break;
+            }
             if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
             	if(this.worstTime<(System.currentTimeMillis() - start)) {
             		this.worstTime = System.currentTimeMillis() - start;
@@ -267,17 +314,37 @@ public class RMServant extends RMPOA {
         	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
         	
         	while (System.currentTimeMillis() < end) {
-                if(RSOneRes==null){
-            		RSOneRes = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
-                }
+        		if(RSOneRes==null){
+        			if(replicaErrorCount[0]==3) {
+        				handleError(RSOne);
+        			}
+        			else {
+        				RSOneRes = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);    
+        			}
+        		}
         		if(RSTwoRes == null){
-                    RSTwoRes = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			if(replicaErrorCount[1]==3) {
+        				handleError(RSTwo);
+        			}
+        			else {
+        				RSTwoRes = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			}
         		}
         		if(RSThreeRes == null) {
-                    RSThreeRes = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			if(replicaErrorCount[2]==3) {
+        				handleError(RSThree);
+        			}
+        			else {
+        				RSThreeRes = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			}	
         		}
         		if(RSFourRes == null){
-                    RSFourRes = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			if(replicaErrorCount[3]==3) {
+        				handleError(RSFour);
+        			}
+        			else {
+        				RSFourRes = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			}	
         		}
                 if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
                 	if(this.worstTime<(System.currentTimeMillis() - start)) {
@@ -324,19 +391,38 @@ public class RMServant extends RMPOA {
     	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
     	
     	while (System.currentTimeMillis() < end) {
-	            
-		    if(RSOneRes==null){
-	    		RSOneRes = RSOne.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
-		    }
-	 		if(RSTwoRes == null){
-			    RSTwoRes = RSTwo.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
-	 		}
-	 		if(RSThreeRes == null) {
-			    RSThreeRes = RSThree.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
-	 		}
-	 		if(RSFourRes == null){
-			    RSFourRes = RSFour.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
-	 		}
+    		if(RSOneRes==null){
+    			if(replicaErrorCount[0]==3) {
+    				handleError(RSOne);
+    			}
+    			else {
+    				RSOneRes = RSOne.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    			}
+    		}
+    		if(RSTwoRes == null){
+    			if(replicaErrorCount[1]==3) {
+    				handleError(RSTwo);
+    			}
+    			else {
+    			    RSTwoRes = RSTwo.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    			}
+    		}
+    		if(RSThreeRes == null) {
+    			if(replicaErrorCount[2]==3) {
+    				handleError(RSThree);
+    			}
+    			else {
+    			    RSThreeRes = RSThree.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    			}	
+    		}
+    		if(RSFourRes == null){
+    			if(replicaErrorCount[3]==3) {
+    				handleError(RSFour);
+    			}
+    			else {
+    			    RSFourRes = RSFour.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    			}	
+    		} 
 	        if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
 	        	if(this.worstTime<(System.currentTimeMillis() - start)) {
 	             		this.worstTime = System.currentTimeMillis() - start;
@@ -384,19 +470,38 @@ public class RMServant extends RMPOA {
         	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
         	
         	while (System.currentTimeMillis() < end) {
-    	            
-                if(RSOneRes==null){
-            		RSOneRes = RSOne.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);         
-    		    }
-    	 		if(RSTwoRes == null){
-                    RSTwoRes = RSTwo.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);          
-    	 		}
-    	 		if(RSThreeRes == null) {
-                    RSThreeRes = RSThree.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
-    	 		}
-    	 		if(RSFourRes == null){
-                    RSFourRes = RSFour.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
-    	 		}
+        		if(RSOneRes==null){
+        			if(replicaErrorCount[0]==3) {
+        				handleError(RSOne);
+        			}
+        			else {
+                		RSOneRes = RSOne.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);         
+        			}
+        		}
+        		if(RSTwoRes == null){
+        			if(replicaErrorCount[1]==3) {
+        				handleError(RSTwo);
+        			}
+        			else {
+                        RSTwoRes = RSTwo.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);          
+        			}
+        		}
+        		if(RSThreeRes == null) {
+        			if(replicaErrorCount[2]==3) {
+        				handleError(RSThree);
+        			}
+        			else {
+                        RSThreeRes = RSThree.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
+        			}	
+        		}
+        		if(RSFourRes == null){
+        			if(replicaErrorCount[3]==3) {
+        				handleError(RSFour);
+        			}
+        			else {
+                        RSFourRes = RSFour.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
+        			}	
+        		}     
     	        if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
     	        	if(this.worstTime<(System.currentTimeMillis() - start)) {
     	             		this.worstTime = System.currentTimeMillis() - start;
