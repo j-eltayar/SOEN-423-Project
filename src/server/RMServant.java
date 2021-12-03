@@ -41,7 +41,9 @@ public class RMServant extends RMPOA {
 	// An orb
 	private ORB orb;
 	int sequenceNUM;
+	private String[] methodCalls;
 	long worstTime = 5000;
+	
 
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
@@ -52,7 +54,9 @@ public class RMServant extends RMPOA {
 	public ORB getORB() {
 		return this.orb;
 	}
-	
+	public void addMethodCall() {
+		
+	}
 	public static String removeLastCharOptional(String s) {
 	    return Optional.ofNullable(s)
 	      .filter(str -> str.length() != 0)
