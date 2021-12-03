@@ -143,11 +143,14 @@ public class Client
                     System.out.print("Select one from the above options: ");
                     int option = sc.nextInt();
                     if (option == 0) {
-                        // Implment test here
+                    	
+                        // Implement test here
                     System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
                     System.out.println(client.createRoom(101, "04-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));	
                     System.out.println(client.createRoom(101, "05-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));	
                     System.out.println(client.createRoom(101, "06-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));	
+                    
+                    
                     }
                     if (option == 1) {
                         System.out.print("Enter Room Number: ");
