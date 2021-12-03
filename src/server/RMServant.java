@@ -220,6 +220,7 @@ public class RMServant extends RMPOA {
     			continue;
     		}
     		else {
+    			this.replicaManagerLog(replicaErrorCount.toString());
     			replicaErrorCount[i]++;
     		}
     	}
@@ -296,6 +297,7 @@ public class RMServant extends RMPOA {
     			continue;
     		}
     		else {
+    			this.replicaManagerLog(replicaErrorCount.toString());
     			replicaErrorCount[i]++;
     		}
     	}
@@ -371,6 +373,7 @@ public class RMServant extends RMPOA {
         			continue;
         		}
         		else {
+        			this.replicaManagerLog(replicaErrorCount.toString());
         			replicaErrorCount[i]++;
         		}
         	}
@@ -452,6 +455,7 @@ public class RMServant extends RMPOA {
     			continue;
     		}
     		else {
+    			this.replicaManagerLog(replicaErrorCount.toString());
     			replicaErrorCount[i]++;
     		}
     	}
@@ -535,6 +539,7 @@ public class RMServant extends RMPOA {
         			continue;
         		}
         		else {
+        			this.replicaManagerLog(replicaErrorCount.toString());
         			replicaErrorCount[i]++;
         		}
         	}
@@ -595,6 +600,7 @@ public class RMServant extends RMPOA {
 	            for (int j = i + 1; j < resArray.length; j++) {
 	                if (!seen[j]) {
 	                	if(resArray[j].contains("SEQUENCER")){
+	                		this.replicaManagerLog(replicaErrorCount.toString());
 	                		replicaErrorCount[j]++;
 	                	}
 	                	else if (resArray[i].equals(resArray[j])) {
@@ -615,6 +621,7 @@ public class RMServant extends RMPOA {
     			continue;
     		}
     		else {
+    			this.replicaManagerLog(replicaErrorCount.toString());
     			replicaErrorCount[i]++;
     		}
     	}
