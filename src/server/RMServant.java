@@ -43,8 +43,8 @@ public class RMServant extends RMPOA {
 	private ORB orb;
 	int sequenceNUM;
 	private String methodCalls;
-	long worstTime = 5000;
-	
+	private long worstTime = 5000;
+	private int[] replicaErrorCount = {0,0,0,0};
 
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
@@ -190,6 +190,15 @@ public class RMServant extends RMPOA {
             	break;
             }
     	}
+    	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+    	for(int i = 0; i<answerArray.length;i++) {
+    		if(answerArray[i]!=null) {
+    			continue;
+    		}
+    		else {
+    			replicaErrorCount[i]++;
+    		}
+    	}
 
         replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         this.replicaManagerLog(replicaManagerAnswer);
@@ -226,7 +235,16 @@ public class RMServant extends RMPOA {
             	break;
             }
     	}
-        
+    	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+    	for(int i = 0; i<answerArray.length;i++) {
+    		if(answerArray[i]!=null) {
+    			continue;
+    		}
+    		else {
+    			replicaErrorCount[i]++;
+    		}
+    	}
+    	
         replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
@@ -267,6 +285,15 @@ public class RMServant extends RMPOA {
                 	}
                 	break;
                 }
+        	}
+        	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+        	for(int i = 0; i<answerArray.length;i++) {
+        		if(answerArray[i]!=null) {
+        			continue;
+        		}
+        		else {
+        			replicaErrorCount[i]++;
+        		}
         	}
 
         	replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
@@ -316,7 +343,16 @@ public class RMServant extends RMPOA {
 	            }
 	            break;
 	        }
-    	}     
+    	}
+    	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+    	for(int i = 0; i<answerArray.length;i++) {
+    		if(answerArray[i]!=null) {
+    			continue;
+    		}
+    		else {
+    			replicaErrorCount[i]++;
+    		}
+    	}
         
         answerHere = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         
@@ -367,6 +403,15 @@ public class RMServant extends RMPOA {
     	            }
     	            break;
     	        }
+        	}
+        	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+        	for(int i = 0; i<answerArray.length;i++) {
+        		if(answerArray[i]!=null) {
+        			continue;
+        		}
+        		else {
+        			replicaErrorCount[i]++;
+        		}
         	}
             
             
@@ -424,7 +469,10 @@ public class RMServant extends RMPOA {
 	            int count = 1;
 	            for (int j = i + 1; j < resArray.length; j++) {
 	                if (!seen[j]) {
-	                    if (resArray[i].equals(resArray[j])) {
+	                	if(resArray[j].contains("SEQUENCER")){
+	                		replicaErrorCount[j]++;
+	                	}
+	                	else if (resArray[i].equals(resArray[j])) {
 	                        seen[j] = true;
 	                        count++;
 	                    }
@@ -437,6 +485,14 @@ public class RMServant extends RMPOA {
 	        }
 	        
 	    }
+	    for(int i = 0; i<resArray.length;i++) {
+    		if(resArray[i].equals(result)) {
+    			continue;
+    		}
+    		else {
+    			replicaErrorCount[i]++;
+    		}
+    	}
 	    replicaManagerAnswer = result;
 	    return replicaManagerAnswer;
 	}
@@ -463,7 +519,7 @@ public class RMServant extends RMPOA {
 		      count = tempCount;
 		    }
 		  }
-		  replicaManagerAnswer = popular;
+		 replicaManagerAnswer = popular;
 		 return replicaManagerAnswer;
 	}
 	
