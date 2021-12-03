@@ -41,6 +41,7 @@ public class RMServant extends RMPOA {
 	// An orb
 	private ORB orb;
 	int sequenceNUM;
+	long worstTime = 5000;
 
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
@@ -155,13 +156,20 @@ public class RMServant extends RMPOA {
         String replicaManagerAnswer = "";
         sequenceNUM++;
         
-        String RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
-
-        String RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
-   
-        String RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
-
-        String RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+        long start = System.currentTimeMillis();
+    	long end = start + worstTime*2;
+    	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+    	
+    	while (System.currentTimeMillis() < end) {
+    		RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    	    RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    	    RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    	    RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+            if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+            	this.worstTime = System.currentTimeMillis() - start;
+            	break;
+            }
+    	}
 
         replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         this.replicaManagerLog(replicaManagerAnswer);
@@ -175,13 +183,22 @@ public class RMServant extends RMPOA {
         
         sequenceNUM++;
         
-        String RSOneRes = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+        long start = System.currentTimeMillis();
+    	long end = start + worstTime*2;
+    	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+    	
+    	while (System.currentTimeMillis() < end) {
+    		RSOneRes = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+            RSTwoRes = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+            RSThreeRes = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+            RSFourRes = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+            
+            if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+            	this.worstTime = System.currentTimeMillis() - start;
+            	break;
+            }
+    	}
         
-        String RSTwoRes = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
-        
-        String RSThreeRes = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
-        
-        String RSFourRes = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
         
         replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         this.replicaManagerLog(replicaManagerAnswer);
@@ -200,10 +217,20 @@ public class RMServant extends RMPOA {
         	
         	sequenceNUM++;
         	
-        	String RSOneRes = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);         
-            String RSTwoRes = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
-            String RSThreeRes = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
-            String RSFourRes = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        	long start = System.currentTimeMillis();
+        	long end = start + worstTime*2;
+        	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+        	
+        	while (System.currentTimeMillis() < end) {
+        		RSOneRes = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);         
+                RSTwoRes = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+                RSThreeRes = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+                RSFourRes = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+                if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+                	this.worstTime = System.currentTimeMillis() - start;
+                	break;
+                }
+        	}
 
         	replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         }
@@ -228,10 +255,22 @@ public class RMServant extends RMPOA {
         
         sequenceNUM++;
         
-        String RSOneRes = RSOne.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
-        String RSTwoRes = RSTwo.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
-        String RSThreeRes = RSThree.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
-        String RSFourRes = RSFour.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+        long start = System.currentTimeMillis();
+    	long end = start + worstTime*2;
+    	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+    	
+    	while (System.currentTimeMillis() < end) {
+    		 RSOneRes = RSOne.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    	     RSTwoRes = RSTwo.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    	     RSThreeRes = RSThree.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    	     RSFourRes = RSFour.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+	            
+            if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+            	this.worstTime = System.currentTimeMillis() - start;
+            	break;
+            }
+    	}
+        
         
         answerHere = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         
@@ -255,12 +294,26 @@ public class RMServant extends RMPOA {
         String replicaManagerAnswer = "";
         
         if(location.contentEquals(replicaManagerName)) {
+        	
         	sequenceNUM++;
             
-            String RSOneRes = RSOne.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);         
-            String RSTwoRes = RSTwo.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);          
-            String RSThreeRes = RSThree.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
-            String RSFourRes = RSFour.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
+            long start = System.currentTimeMillis();
+        	long end = start + worstTime*2;
+        	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+        	
+        	while (System.currentTimeMillis() < end) {
+        		RSOneRes = RSOne.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);         
+                RSTwoRes = RSTwo.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);          
+                RSThreeRes = RSThree.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
+                RSFourRes = RSFour.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
+    	            
+                if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+                	this.worstTime = System.currentTimeMillis() - start;
+                	break;
+                }
+        	}
+            
+            
             
         	replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         }
