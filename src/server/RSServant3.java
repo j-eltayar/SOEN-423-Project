@@ -10,9 +10,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.SocketException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 
 
@@ -75,9 +77,38 @@ public class RSServant3 extends RSPOA{
         LocalDateTime now = LocalDateTime.now();
         return dtf.format(now);
     }
+	public void handleError(String s) {
+		try {
+			this.server = new CampusServerImpl(Campus.valueOf(replicaServerName.replaceAll("\\d", "")));
+		} catch (SocketException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		String[] calls = s.split("!");
+		this.sequenceIntRS = 0;
+		for ( int i = 0; i< calls.length;i++) {
+			String[] params = calls[i].split(";");
+			if(params[0].equals("createRoom")) {
+				this.createRoomHere(Integer.parseInt(params[1]), params[2], params[3], params[4], params[5]);
+			} else if(params[0].equals("deleteRoom")) {
+				this.deleteRoomHere(Integer.parseInt(params[1]), params[2], params[3], params[4], params[5]);
+			} else if(params[0].equals("bookRoom")) {
+				this.bookRoomHere(params[1], Integer.parseInt(params[2]), params[3], params[4], params[5], params[6]);
+			} else if(params[0].equals("getAvailableTimeSlot")) {
+				this.getAvailableTimeSlotHere(params[1], params[2], params[3]);
+			} else if(params[0].equals("cancelBooking")){
+				this.cancelBookingHere(params[1], params[2], params[3]);
+			}
+		}
+	}
 
 	@Override
 	public String createRoomHere(int roomNumber, String date, String List_Of_Time_Slots, String id, String location) {
+		if (roomNumber == -1) {
+			this.handleError(date);
+			return "restarting server";
+		}
         String replicaServerAnswer;
         String[] loca = location.split("!"); 
     	location = loca[0];

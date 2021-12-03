@@ -2,6 +2,7 @@ package server;
 import RSAPP.*;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.List;
 import java.lang.Object;
 import org.omg.CosNaming.*;
 import org.omg.CosNaming.NamingContextPackage.*;
@@ -55,6 +56,7 @@ public class RSServant2 extends RSPOA{
 			}
 			
 		}
+		
 		
 		public String setBooked(String time, String studentId ) {
 			System.out.println("booking");
@@ -148,7 +150,26 @@ public class RSServant2 extends RSPOA{
 		return "\nHello World From: " + this.replicaServerName + "\n";
 		
 	}
-	
+	public void handleError(String s) {
+		this.rooms = new HashMap<String, HashMap<String, RoomRecord>>();
+		
+		String[] calls = s.split("!");
+		this.sequenceIntRS = 0;
+		for ( int i = 0; i< calls.length;i++) {
+			String[] params = calls[i].split(";");
+			if(params[0].equals("createRoom")) {
+				this.createRoomHere(Integer.parseInt(params[1]), params[2], params[3], params[4], params[5]);
+			} else if(params[0].equals("deleteRoom")) {
+				this.deleteRoomHere(Integer.parseInt(params[1]), params[2], params[3], params[4], params[5]);
+			} else if(params[0].equals("bookRoom")) {
+				this.bookRoomHere(params[1], Integer.parseInt(params[2]), params[3], params[4], params[5], params[6]);
+			} else if(params[0].equals("getAvailableTimeSlot")) {
+				this.getAvailableTimeSlotHere(params[1], params[2], params[3]);
+			} else if(params[0].equals("cancelBooking")){
+				this.cancelBookingHere(params[1], params[2], params[3]);
+			}
+		}
+	}
 	// Log method that takes a string and then inputs it into the RM's log file.
 	public void replicaManagerLog(String input) {
         try {
@@ -172,6 +193,10 @@ public class RSServant2 extends RSPOA{
 
 	@Override
 	public String createRoomHere(int roomNumber, String date, String timeSlots, String id, String location) {
+		if (roomNumber == -1) {
+			this.handleError(date);
+			return "restarting server";
+		}
         String replicaServerAnswer = "";
         String[] loca = location.split("!"); 
     	location = loca[0];
