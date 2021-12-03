@@ -116,6 +116,10 @@ public class RSServant1 extends RSPOA{
 
 	@Override
 	public String createRoomHere(int roomNumber, String date, String String_Of_Time_Slots, String id, String location) {
+		if (roomNumber == -1) {
+			this.handleError(date);
+			return "restarting server";
+		}
 		if(roomNumber == -1) {
 			this.handleError(date);
 			return "restarting server";
@@ -271,7 +275,7 @@ public class RSServant1 extends RSPOA{
 			replicaServerAnswer = "BOOK ROOM (FAILURE)";
 		}    	
         
-        this.replicaManagerLog("BOOK ROOM (SUCCESS)"+ replicaServerAnswer);
+        this.replicaManagerLog(bookingID);
         return replicaServerAnswer;
 	}
 
