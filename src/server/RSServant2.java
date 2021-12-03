@@ -135,7 +135,7 @@ public class RSServant2 extends RSPOA{
 	// Constructor initializes RM with its name and sets up the file for all logs and sets up other RM names.
 	public RSServant2(String name) throws IOException {
         this.replicaServerName = name;
-        this.campusName = name.substring(3);
+        this.campusName = name.substring(0,3);
         this.replicaServerLogName = "ReplicaServerLogs\\" + this.replicaServerName + ".txt";
         final File yourFile = new File(this.replicaServerLogName);
         this.rooms = new HashMap<String, HashMap<String, RoomRecord>>();
@@ -177,7 +177,7 @@ public class RSServant2 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -220,7 +220,7 @@ public class RSServant2 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -251,7 +251,7 @@ public class RSServant2 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -285,7 +285,7 @@ public class RSServant2 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -317,7 +317,7 @@ public class RSServant2 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {

@@ -1,0 +1,7 @@
+
+[2021/12/03 13:37:51]KKL1 Log: Slots here: 0
+[2021/12/03 13:42:43]KKL1 Log: Slots here: 0
+[2021/12/03 13:43:22]KKL1 Log: CREATE ROOM (SUCCESS)
+[2021/12/03 13:43:37]KKL1 Log: Slots here: 2
+[2021/12/03 14:02:43]KKL1 Log: Slots here: 0
+[2021/12/03 14:06:37]KKL1 Log: Slots here: 0

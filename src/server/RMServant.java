@@ -458,8 +458,8 @@ public class RMServant extends RMPOA {
         
         answerHere = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         
-        if(location.contentEquals(replicaManagerName)) {
-        	replicaManagerAnswer = replicaManagerName + ":" + answerHere + "|" + RMOne.getAvailableTimeSlot(date, id, location) + ":" + answerHere + "|" + RMTwo.getAvailableTimeSlot(date, id, location);
+        if(location.equals(replicaManagerName)) {
+        	replicaManagerAnswer = replicaManagerName + ":" + answerHere + "|" + RMOneName + ":" + RMOne.getAvailableTimeSlot(date, id, location) + "|"+ RMTwoName + ":" + RMTwo.getAvailableTimeSlot(date, id, location);
         }
         else{
         	replicaManagerAnswer = answerHere;

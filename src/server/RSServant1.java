@@ -124,8 +124,9 @@ public class RSServant1 extends RSPOA{
 	        String[] loca = location.split("!"); 
 	    	location = loca[0];
 	    	String sequenceint = loca[1];
-	    	
-	    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+	    	System.out.println("SRS"+sequenceIntRS);
+	    	System.out.println("SRm"+Integer.parseInt(sequenceint));
+	    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
 	    		return "CREATE ROOM (FAILURE) SEQUENCER";
 	    	}
 	    	else {
@@ -160,12 +161,18 @@ public class RSServant1 extends RSPOA{
 	     			}
 	 				if(addedTS.equals("")){
 	 					replicaServerAnswer = "CREATE ROOM (FAILURE)";
+	 					this.replicaManagerLog(replicaServerAnswer);
+	 			        return replicaServerAnswer;
 	 				} 
 	 				replicaServerAnswer = "CREATE ROOM (SUCCESS)";
+	 				this.replicaManagerLog(replicaServerAnswer);
+	 		        return replicaServerAnswer;
 	     		}
 	     		else {
 	     			this.getDataBase().get(date).put(roomNumber, List_Of_Time_Slots);
 	     			replicaServerAnswer = "CREATE ROOM (SUCCESS)";
+	     			this.replicaManagerLog(replicaServerAnswer);
+	    	        return replicaServerAnswer;
 	     		}
 	     	}
 	     	else {
@@ -173,10 +180,10 @@ public class RSServant1 extends RSPOA{
 	     		tempHP.put(roomNumber, List_Of_Time_Slots);
 	     		this.getDataBase().put(date, tempHP);
 	     		replicaServerAnswer = "CREATE ROOM (SUCCESS)";
+	     		this.replicaManagerLog(replicaServerAnswer);
+		        return replicaServerAnswer;
+	     		
 	     	}
-	        
-	        this.replicaManagerLog(replicaServerAnswer);
-	        return replicaServerAnswer;
 			}
 	}
 
@@ -187,7 +194,7 @@ public class RSServant1 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -216,16 +223,21 @@ public class RSServant1 extends RSPOA{
      		}
      		else {
      			replicaServerAnswer = "DELETE ROOM (FAILURE)";
+     			this.replicaManagerLog(replicaServerAnswer);
+     			return replicaServerAnswer;
      		}
      	}
      	else {
      		replicaServerAnswer = "DELETE ROOM (FAILURE)";
+     		this.replicaManagerLog(replicaServerAnswer);
+     		return replicaServerAnswer;
      	}
  		if(removedTS.equals("")){
  			replicaServerAnswer = "DELETE ROOM (FAILURE)";
+ 			this.replicaManagerLog(replicaServerAnswer);
+ 			return replicaServerAnswer;
  		} 	
  		replicaServerAnswer = "DELETE ROOM (SUCCESS)";
-        
         this.replicaManagerLog(replicaServerAnswer);
         return replicaServerAnswer;
 	}
@@ -238,7 +250,7 @@ public class RSServant1 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -252,27 +264,29 @@ public class RSServant1 extends RSPOA{
 				for (String[] element : this.getDataBase().get(date).get(roomNumber)) {
 					if(element[0].equals(timeslot)) {
 						if(!element[1].equals("Not Booked")) {
-							replicaServerAnswer = "BOOK ROOM (FAILURE)";
+							this.replicaManagerLog("BOOK ROOM (FAILURE)");
+							return replicaServerAnswer = "BOOK ROOM (FAILURE)";
 						}
 						else {
 							element[1] = bookingID;
 							element[2] = id;
-							replicaServerAnswer = bookingID;
+							this.replicaManagerLog("BOOK ROOM (SUCCESS)");
+							return replicaServerAnswer = "BOOK ROOM (SUCCESS)"+bookingID;
 						}
 					}					
 				}
-				replicaServerAnswer = "BOOK ROOM (FAILURE)";
+				this.replicaManagerLog("BOOK ROOM (FAILURE)");
+				return replicaServerAnswer = "BOOK ROOM (FAILURE)";
 			}
 			else {  
-				replicaServerAnswer = "BOOK ROOM (FAILURE)";
+				this.replicaManagerLog("BOOK ROOM (FAILURE)");
+				return replicaServerAnswer = "BOOK ROOM (FAILURE)";
 			}
 		}
 		else { 
-			replicaServerAnswer = "BOOK ROOM (FAILURE)";
+			this.replicaManagerLog("BOOK ROOM (FAILURE)");
+			return replicaServerAnswer = "BOOK ROOM (FAILURE)";
 		}    	
-        
-        this.replicaManagerLog("BOOK ROOM (SUCCESS)"+ replicaServerAnswer);
-        return replicaServerAnswer;
 	}
 
 	@Override
@@ -283,7 +297,7 @@ public class RSServant1 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -318,7 +332,7 @@ public class RSServant1 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
         
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -343,21 +357,26 @@ public class RSServant1 extends RSPOA{
 							element[1] = "Not Booked";
 							element[2] = "";
 							replicaServerAnswer = "CANCEL BOOKING (SUCCESS)";
+							this.replicaManagerLog(replicaServerAnswer);
+							return replicaServerAnswer;
 						}
 					}										
 				}
 				replicaServerAnswer = "CANCEL BOOKING (FAILURE)";
+				this.replicaManagerLog(replicaServerAnswer);
+				return replicaServerAnswer;
 			}
 			else {
 				replicaServerAnswer = "CANCEL BOOKING (FAILURE)";
+				this.replicaManagerLog(replicaServerAnswer);
+				return replicaServerAnswer;
 			}
 		}
 		else {
 			replicaServerAnswer = "CANCEL BOOKING (FAILURE)";
+			this.replicaManagerLog(replicaServerAnswer);
+			return replicaServerAnswer;
 		}
-        
-        this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
 	}
 
 	@Override
