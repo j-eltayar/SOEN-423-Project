@@ -12,6 +12,8 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
+import java.util.Optional;
 
 /*
  *	Replica Manager Class: Layer of abstraction before communication with the replica servers that store the actual infromation and preform the actual
@@ -39,6 +41,10 @@ public class RMServant extends RMPOA {
 	private RS RSFour;
 	// An orb
 	private ORB orb;
+	int sequenceNUM;
+	private String methodCalls;
+	private long worstTime = 5000;
+	private int[] replicaErrorCount = {0,0,0,0};
 
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
@@ -48,6 +54,20 @@ public class RMServant extends RMPOA {
 	// Getter for the orb of this servant
 	public ORB getORB() {
 		return this.orb;
+	}
+	public void addMethodCall(String s) {
+		methodCalls += s+"!";
+	}
+	public static String removeLastCharOptional(String s) {
+	    return Optional.ofNullable(s)
+	      .filter(str -> str.length() != 0)
+	      .map(str -> str.substring(0, str.length() - 1))
+	      .orElse(s);
+	}
+	 
+	public void handleError(RS rs) {
+		String s = "f";
+		rs.createRoomHere(-1, methodCalls,s,s,s);
 	}
 	
 	public String setRMServers() {
@@ -142,9 +162,69 @@ public class RMServant extends RMPOA {
 	// Create Room method. Create a room in all replicas. 
     @Override
 	public String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
-    {
+    {	
         String replicaManagerAnswer = "";
-        replicaManagerAnswer = validateResponseString(RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location), RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location) , RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location), RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location));
+        sequenceNUM++;
+        addMethodCall("createRoom;"+roomNumber+";"+date+";"+List_Of_Time_Slots+";"+id+";"+location);
+        long start = System.currentTimeMillis();
+    	long end = start + worstTime*2;
+    	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+    	
+    	while (System.currentTimeMillis() < end) {
+    		if(RSOneRes==null){
+    			if(replicaErrorCount[0]>=3) {
+    				handleError(RSOne);
+    				replicaErrorCount[0]=0;
+    			}
+    			else {
+    				RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}
+    		}
+    		if(RSTwoRes == null){
+    			if(replicaErrorCount[1]>=3) {
+    				handleError(RSTwo);
+    				replicaErrorCount[1]=0;
+    			}
+    			else {
+    				RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}
+    		}
+    		if(RSThreeRes == null) {
+    			if(replicaErrorCount[2]>=3) {
+    				handleError(RSThree);
+    				replicaErrorCount[2]=0;
+    			}
+    			else {
+    				RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}	
+    		}
+    		if(RSFourRes == null){
+    			if(replicaErrorCount[3]>=3) {
+    				handleError(RSFour);
+    				replicaErrorCount[3]=0;
+    			}
+    			else {
+    				RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}	
+    		}
+            if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+            	if(this.worstTime<(System.currentTimeMillis() - start)) {
+            		this.worstTime = System.currentTimeMillis() - start;
+            	}
+            	break;
+            }
+    	}
+    	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+    	for(int i = 0; i<answerArray.length;i++) {
+    		if(answerArray[i]!=null) {
+    			continue;
+    		}
+    		else {
+    			replicaErrorCount[i]++;
+    		}
+    	}
+
+        replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -153,7 +233,74 @@ public class RMServant extends RMPOA {
     @Override
     public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String id, String location) {
         String replicaManagerAnswer = "";
-        replicaManagerAnswer = validateResponseString(RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location), RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location));
+        
+        sequenceNUM++;
+        addMethodCall("deleteRoom"+";"+room_Number+";"+date+";"+list_Of_Time_Slots+";"+id+";"+location);
+        long start = System.currentTimeMillis();
+    	long end = start + worstTime*2;
+    	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+    	
+    	while (System.currentTimeMillis() < end) {
+    		if(RSOneRes==null){
+    			if(replicaErrorCount[0]>=3) {
+    				handleError(RSOne);
+    				replicaErrorCount[0]=0;
+    			}
+    			else {
+    				RSOneRes = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);    
+    			}
+    		}
+    		if(RSTwoRes == null){
+    			if(replicaErrorCount[1]>=3) {
+    				handleError(RSTwo);
+    				replicaErrorCount[1]=0;
+    			}
+    			else {
+    				RSTwoRes = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}
+    		}
+    		if(RSThreeRes == null) {
+    			if(replicaErrorCount[2]>=3) {
+    				handleError(RSThree);
+    				replicaErrorCount[2]=0;
+    			}
+    			else {
+    				RSThreeRes = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}	
+    		}
+    		if(RSFourRes == null){
+    			if(replicaErrorCount[3]>=3) {
+    				handleError(RSFour);
+    				replicaErrorCount[3]=0;
+    			}
+    			else {
+    				RSFourRes = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
+    			}	
+    		}
+            if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+            	if(this.worstTime<(System.currentTimeMillis() - start)) {
+            		this.worstTime = System.currentTimeMillis() - start;
+            	}
+            	break;
+            }
+            if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+            	if(this.worstTime<(System.currentTimeMillis() - start)) {
+            		this.worstTime = System.currentTimeMillis() - start;
+            	}
+            	break;
+            }
+    	}
+    	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+    	for(int i = 0; i<answerArray.length;i++) {
+    		if(answerArray[i]!=null) {
+    			continue;
+    		}
+    		else {
+    			replicaErrorCount[i]++;
+    		}
+    	}
+    	
+        replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -167,7 +314,68 @@ public class RMServant extends RMPOA {
     public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String id, String location) {
         String replicaManagerAnswer = "";
         if(location.contentEquals(replicaManagerName)) {
-        	replicaManagerAnswer = validateResponseString(RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location), RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location));
+        	
+        	sequenceNUM++;
+        	addMethodCall("bookRoom"+";"+campusName+";"+roomNumber+";"+date+";"+timeslot+";"+id+";"+location);
+        	long start = System.currentTimeMillis();
+        	long end = start + worstTime*2;
+        	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+        	
+        	while (System.currentTimeMillis() < end) {
+        		if(RSOneRes==null){
+        			if(replicaErrorCount[0]>=3) {
+        				handleError(RSOne);
+        				replicaErrorCount[0]=0;
+        			}
+        			else {
+        				RSOneRes = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);    
+        			}
+        		}
+        		if(RSTwoRes == null){
+        			if(replicaErrorCount[1]>=3) {
+        				handleError(RSTwo);
+        				replicaErrorCount[1]=0;
+        			}
+        			else {
+        				RSTwoRes = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			}
+        		}
+        		if(RSThreeRes == null) {
+        			if(replicaErrorCount[2]>=3) {
+        				handleError(RSThree);
+        				replicaErrorCount[2]=0;
+        			}
+        			else {
+        				RSThreeRes = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			}	
+        		}
+        		if(RSFourRes == null){
+        			if(replicaErrorCount[3]>=3) {
+        				handleError(RSFour);
+        				replicaErrorCount[3]=0;
+        			}
+        			else {
+        				RSFourRes = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
+        			}	
+        		}
+                if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+                	if(this.worstTime<(System.currentTimeMillis() - start)) {
+                		this.worstTime = System.currentTimeMillis() - start;
+                	}
+                	break;
+                }
+        	}
+        	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+        	for(int i = 0; i<answerArray.length;i++) {
+        		if(answerArray[i]!=null) {
+        			continue;
+        		}
+        		else {
+        			replicaErrorCount[i]++;
+        		}
+        	}
+
+        	replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         }
         else if(location.contentEquals(RMOneName)) {
         	replicaManagerAnswer = RMOne.bookRoom(campusName, roomNumber, date, timeslot, id, location);
@@ -187,7 +395,69 @@ public class RMServant extends RMPOA {
     public String getAvailableTimeSlot(String date, String id, String location) {
         String replicaManagerAnswer = "";
         String answerHere = "";
-        answerHere = validateResponseString(RSOne.getAvailableTimeSlotHere(date, id, location), RSTwo.getAvailableTimeSlotHere(date, id, location), RSThree.getAvailableTimeSlotHere(date, id, location), RSFour.getAvailableTimeSlotHere(date, id, location));
+        
+        sequenceNUM++;
+        addMethodCall("getAvailableTimeSlot"+";"+date+";"+location);
+        long start = System.currentTimeMillis();
+    	long end = start + worstTime*2;
+    	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+    	
+    	while (System.currentTimeMillis() < end) {
+    		if(RSOneRes==null){
+    			if(replicaErrorCount[0]>=3) {
+    				handleError(RSOne);
+    				replicaErrorCount[0]=0;
+    			}
+    			else {
+    				RSOneRes = RSOne.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    			}
+    		}
+    		if(RSTwoRes == null){
+    			if(replicaErrorCount[1]>=3) {
+    				handleError(RSTwo);
+    				replicaErrorCount[1]=0;
+    			}
+    			else {
+    			    RSTwoRes = RSTwo.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    			}
+    		}
+    		if(RSThreeRes == null) {
+    			if(replicaErrorCount[2]>=3) {
+    				handleError(RSThree);
+    				replicaErrorCount[2]=0;
+    			}
+    			else {
+    			    RSThreeRes = RSThree.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    			}	
+    		}
+    		if(RSFourRes == null){
+    			if(replicaErrorCount[3]>=3) {
+    				handleError(RSFour);
+    				replicaErrorCount[3]=0;
+    			}
+    			else {
+    			    RSFourRes = RSFour.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
+    			}	
+    		} 
+	        if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+	        	if(this.worstTime<(System.currentTimeMillis() - start)) {
+	             		this.worstTime = System.currentTimeMillis() - start;
+	            }
+	            break;
+	        }
+    	}
+    	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+    	for(int i = 0; i<answerArray.length;i++) {
+    		if(answerArray[i]!=null) {
+    			continue;
+    		}
+    		else {
+    			replicaErrorCount[i]++;
+    		}
+    	}
+        
+        answerHere = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
+        
         if(location.contentEquals(replicaManagerName)) {
         	replicaManagerAnswer = replicaManagerName + ":" + answerHere + "|" + RMOne.getAvailableTimeSlot(date, id, location) + ":" + answerHere + "|" + RMTwo.getAvailableTimeSlot(date, id, location);
         }
@@ -206,8 +476,72 @@ public class RMServant extends RMPOA {
     @Override
     public String cancelBooking(String bookingID, String id, String location) {
         String replicaManagerAnswer = "";
+        
         if(location.contentEquals(replicaManagerName)) {
         	
+        	sequenceNUM++;
+            addMethodCall("cancelBooking;"+bookingID+";"+id+";"+location);
+            long start = System.currentTimeMillis();
+        	long end = start + worstTime*2;
+        	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
+        	
+        	while (System.currentTimeMillis() < end) {
+        		if(RSOneRes==null){
+        			if(replicaErrorCount[0]>=3) {
+        				handleError(RSOne);
+        				replicaErrorCount[0]=0;
+        			}
+        			else {
+                		RSOneRes = RSOne.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);         
+        			}
+        		}
+        		if(RSTwoRes == null){
+        			if(replicaErrorCount[1]>=3) {
+        				handleError(RSTwo);
+        				replicaErrorCount[1]=0;
+        			}
+        			else {
+                        RSTwoRes = RSTwo.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);          
+        			}
+        		}
+        		if(RSThreeRes == null) {
+        			if(replicaErrorCount[2]>=3) {
+        				handleError(RSThree);
+        				replicaErrorCount[2]=0;
+        			}
+        			else {
+                        RSThreeRes = RSThree.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
+        			}	
+        		}
+        		if(RSFourRes == null){
+        			if(replicaErrorCount[3]>=3) {
+        				handleError(RSFour);
+        				replicaErrorCount[3]=0;
+        			}
+        			else {
+                        RSFourRes = RSFour.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
+        			}	
+        		}     
+    	        if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
+    	        	if(this.worstTime<(System.currentTimeMillis() - start)) {
+    	             		this.worstTime = System.currentTimeMillis() - start;
+    	            }
+    	            break;
+    	        }
+        	}
+        	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
+        	for(int i = 0; i<answerArray.length;i++) {
+        		if(answerArray[i]!=null) {
+        			continue;
+        		}
+        		else {
+        			replicaErrorCount[i]++;
+        		}
+        	}
+            
+            
+            
+        	replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
         }
         else if(location.contentEquals(RMOneName)) {
         	replicaManagerAnswer = RMOne.cancelBooking(bookingID, id, location);
@@ -228,8 +562,11 @@ public class RMServant extends RMPOA {
      */
     @Override
     public String changeReservation(String bookingID, String selectedCampus, int selectedRoom, String selectedDate, String selectedTimeslot, String id, String location) {
-        String replicaManagerAnswer = "";
-        
+       
+    	
+    	
+    	String replicaManagerAnswer = "";
+
         String serverAnswer1 = this.cancelBooking(bookingID, id, location);
         String serverAnswer2 = this.bookRoom(selectedCampus, selectedRoom, selectedDate, selectedTimeslot, id, location);;
         replicaManagerAnswer = serverAnswer1 + serverAnswer2;
@@ -257,7 +594,10 @@ public class RMServant extends RMPOA {
 	            int count = 1;
 	            for (int j = i + 1; j < resArray.length; j++) {
 	                if (!seen[j]) {
-	                    if (resArray[i].equals(resArray[j])) {
+	                	if(resArray[j].contains("SEQUENCER")){
+	                		replicaErrorCount[j]++;
+	                	}
+	                	else if (resArray[i].equals(resArray[j])) {
 	                        seen[j] = true;
 	                        count++;
 	                    }
@@ -270,6 +610,14 @@ public class RMServant extends RMPOA {
 	        }
 	        
 	    }
+	    for(int i = 0; i<resArray.length;i++) {
+    		if(resArray[i].equals(result)) {
+    			continue;
+    		}
+    		else {
+    			replicaErrorCount[i]++;
+    		}
+    	}
 	    replicaManagerAnswer = result;
 	    return replicaManagerAnswer;
 	}
@@ -296,7 +644,7 @@ public class RMServant extends RMPOA {
 		      count = tempCount;
 		    }
 		  }
-		  replicaManagerAnswer = popular;
+		 replicaManagerAnswer = popular;
 		 return replicaManagerAnswer;
 	}
 	
