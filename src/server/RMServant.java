@@ -12,6 +12,7 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Optional;
 
 /*
@@ -41,7 +42,7 @@ public class RMServant extends RMPOA {
 	// An orb
 	private ORB orb;
 	int sequenceNUM;
-	private String[] methodCalls;
+	private String methodCalls;
 	long worstTime = 5000;
 	
 
@@ -54,14 +55,19 @@ public class RMServant extends RMPOA {
 	public ORB getORB() {
 		return this.orb;
 	}
-	public void addMethodCall() {
-		
+	public void addMethodCall(String s) {
+		methodCalls += s+"!";
 	}
 	public static String removeLastCharOptional(String s) {
 	    return Optional.ofNullable(s)
 	      .filter(str -> str.length() != 0)
 	      .map(str -> str.substring(0, str.length() - 1))
 	      .orElse(s);
+	}
+	 
+	public void handleError(RS rs) {
+		String s = "f";
+		rs.createRoomHere(-1, methodCalls,s,s,s);
 	}
 	
 	public String setRMServers() {
@@ -159,7 +165,7 @@ public class RMServant extends RMPOA {
     {
         String replicaManagerAnswer = "";
         sequenceNUM++;
-        
+        addMethodCall("createRoom;"+roomNumber+";"+date+";"+List_Of_Time_Slots+";"+id+";"+location);
         long start = System.currentTimeMillis();
     	long end = start + worstTime*2;
     	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
@@ -196,7 +202,7 @@ public class RMServant extends RMPOA {
         String replicaManagerAnswer = "";
         
         sequenceNUM++;
-        
+        addMethodCall("deleteRoom"+";"+room_Number+";"+date+";"+list_Of_Time_Slots+";"+id+";"+location);
         long start = System.currentTimeMillis();
     	long end = start + worstTime*2;
     	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
@@ -237,7 +243,7 @@ public class RMServant extends RMPOA {
         if(location.contentEquals(replicaManagerName)) {
         	
         	sequenceNUM++;
-        	
+        	addMethodCall("campusName"+";"+roomNumber+";"+date+";"+timeslot+";"+id+";"+location);
         	long start = System.currentTimeMillis();
         	long end = start + worstTime*2;
         	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
@@ -285,7 +291,7 @@ public class RMServant extends RMPOA {
         String answerHere = "";
         
         sequenceNUM++;
-        
+        addMethodCall("getAvailableTimeSlot"+";"+date+";"+location);
         long start = System.currentTimeMillis();
     	long end = start + worstTime*2;
     	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
@@ -336,7 +342,7 @@ public class RMServant extends RMPOA {
         if(location.contentEquals(replicaManagerName)) {
         	
         	sequenceNUM++;
-            
+            addMethodCall("cancelBooking;"+bookingID+";"+id+";"+location);
             long start = System.currentTimeMillis();
         	long end = start + worstTime*2;
         	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
@@ -386,7 +392,10 @@ public class RMServant extends RMPOA {
      */
     @Override
     public String changeReservation(String bookingID, String selectedCampus, int selectedRoom, String selectedDate, String selectedTimeslot, String id, String location) {
-        String replicaManagerAnswer = "";
+       
+    	
+    	
+    	String replicaManagerAnswer = "";
 
         String serverAnswer1 = this.cancelBooking(bookingID, id, location);
         String serverAnswer2 = this.bookRoom(selectedCampus, selectedRoom, selectedDate, selectedTimeslot, id, location);;
