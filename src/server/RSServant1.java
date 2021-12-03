@@ -67,7 +67,7 @@ public class RSServant1 extends RSPOA{
 	public void handleError(String s) {
 		this.dataBase = new HashMap<String, HashMap<Integer, List<String[]>>>();
 		
-		String[] calls = s.split("!");
+		String[] calls = s.split("@");
 		this.sequenceIntRS = 0;
 		for ( int i = 0; i< calls.length;i++) {
 			String[] params = calls[i].split(";");
@@ -124,8 +124,6 @@ public class RSServant1 extends RSPOA{
 	        String[] loca = location.split("!"); 
 	    	location = loca[0];
 	    	String sequenceint = loca[1];
-	    	System.out.println("SRS"+sequenceIntRS);
-	    	System.out.println("SRm"+Integer.parseInt(sequenceint));
 	    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
 	    		return "CREATE ROOM (FAILURE) SEQUENCER";
 	    	}
@@ -270,8 +268,8 @@ public class RSServant1 extends RSPOA{
 						else {
 							element[1] = bookingID;
 							element[2] = id;
-							this.replicaManagerLog("BOOK ROOM (SUCCESS)");
-							return replicaServerAnswer = "BOOK ROOM (SUCCESS)"+bookingID;
+							this.replicaManagerLog(bookingID);
+							return replicaServerAnswer = bookingID;
 						}
 					}					
 				}

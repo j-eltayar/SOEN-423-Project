@@ -153,7 +153,7 @@ public class RSServant2 extends RSPOA{
 	public void handleError(String s) {
 		this.rooms = new HashMap<String, HashMap<String, RoomRecord>>();
 		
-		String[] calls = s.split("!");
+		String[] calls = s.split("@");
 		this.sequenceIntRS = 0;
 		for ( int i = 0; i< calls.length;i++) {
 			String[] params = calls[i].split(";");
@@ -216,14 +216,14 @@ public class RSServant2 extends RSPOA{
 			HashMap<String, RoomRecord> rrs = new HashMap<String, RoomRecord>();
 			rrs.put(String.valueOf(roomNumber), rr);
 			rooms.put(date, rrs);
+			replicaServerAnswer = "CREATE ROOM (SUCCES)";
 		
 		}
 		else if(rooms.get(date).get(roomNumber)==null){
 			HashMap<String, RoomRecord> roomsOnDay = rooms.get(date);
 			RoomRecord rr = new RoomRecord(this.getName(),String.valueOf(roomNumber), date, ts);
-			roomsOnDay.put(String.valueOf(roomNumber), rr);
-			
-			
+			roomsOnDay.put(String.valueOf(roomNumber), rr);	
+			replicaServerAnswer = "CREATE ROOM (SUCCESS)";
 		}
 		else {
 			RoomRecord rr = rooms.get(date).get(String.valueOf(roomNumber));
@@ -231,7 +231,7 @@ public class RSServant2 extends RSPOA{
 			if(response == 0) {
 				replicaServerAnswer = "CREATE ROOM (FAILURE)";
 			} else {
-				replicaServerAnswer = "CREATE ROOM (SUCCESS)";
+				replicaServerAnswer = "CREATE ROOM (SUCCES)";
 			}
 		}
         this.replicaManagerLog(replicaServerAnswer);
@@ -344,6 +344,7 @@ public class RSServant2 extends RSPOA{
     	
     	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
+    		
     	}
     	else {
     		sequenceIntRS++;
@@ -366,6 +367,7 @@ public class RSServant2 extends RSPOA{
 			this.replicaManagerLog(replicaServerAnswer);
 	        return replicaServerAnswer;
 		}
+		replicaServerAnswer = "CANCEL BOOKING (SUCCESS)";
 		this.replicaManagerLog(replicaServerAnswer);
 		return rr.cancelBooking(bookingID);
        

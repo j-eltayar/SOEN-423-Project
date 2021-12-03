@@ -17,6 +17,7 @@ public class Server {
 
 	public static void main(String[] args) throws RemoteException {
 		
+		
 		try {
 
 			Properties props = new Properties();
@@ -186,6 +187,8 @@ public class Server {
 			rmServantKKL.setRSServers();
 			// Set Replica Server connections between RMWST and the 4 RSWST instances
 			rmServantWST.setRSServers();
+			
+			
 		
 		} catch( Exception e ) {
 			System.err.println("ERROR: " + e);
