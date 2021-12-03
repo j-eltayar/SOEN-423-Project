@@ -164,13 +164,13 @@ public class RMServant extends RMPOA {
     		if(RSOneRes==null){
     			RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     		}
-    		else if(RSTwoRes == null){
+    		if(RSTwoRes == null){
     			RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     		}
-    		else if(RSThreeRes == null) {
+    		if(RSThreeRes == null) {
     			RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     		}
-    		else if(RSFourRes == null){
+    		if(RSFourRes == null){
     			RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
     		}
             if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
@@ -200,13 +200,13 @@ public class RMServant extends RMPOA {
     	while (System.currentTimeMillis() < end) {
     		if(RSOneRes==null){
     			RSOneRes = RSOne.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);        		}
-    		else if(RSTwoRes == null){
+    		if(RSTwoRes == null){
                 RSTwoRes = RSTwo.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
     		}
-    		else if(RSThreeRes == null) {
+    		if(RSThreeRes == null) {
                 RSThreeRes = RSThree.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
     		}
-    		else if(RSFourRes == null){
+    		if(RSFourRes == null){
                 RSFourRes = RSFour.deleteRoomHere(room_Number, date, list_Of_Time_Slots, id, location+"!"+sequenceNUM);
     		}
             if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
@@ -242,13 +242,13 @@ public class RMServant extends RMPOA {
                 if(RSOneRes==null){
             		RSOneRes = RSOne.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
                 }
-        		else if(RSTwoRes == null){
+        		if(RSTwoRes == null){
                     RSTwoRes = RSTwo.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
         		}
-        		else if(RSThreeRes == null) {
+        		if(RSThreeRes == null) {
                     RSThreeRes = RSThree.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
         		}
-        		else if(RSFourRes == null){
+        		if(RSFourRes == null){
                     RSFourRes = RSFour.bookRoomHere(campusName, roomNumber, date, timeslot, id, location+"!"+sequenceNUM);
         		}
                 if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
@@ -291,13 +291,13 @@ public class RMServant extends RMPOA {
 		    if(RSOneRes==null){
 	    		RSOneRes = RSOne.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
 		    }
-	 		else if(RSTwoRes == null){
+	 		if(RSTwoRes == null){
 			    RSTwoRes = RSTwo.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
 	 		}
-	 		else if(RSThreeRes == null) {
+	 		if(RSThreeRes == null) {
 			    RSThreeRes = RSThree.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
 	 		}
-	 		else if(RSFourRes == null){
+	 		if(RSFourRes == null){
 			    RSFourRes = RSFour.getAvailableTimeSlotHere(date, id, location+"!"+sequenceNUM);
 	 		}
 	        if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
@@ -342,13 +342,13 @@ public class RMServant extends RMPOA {
                 if(RSOneRes==null){
             		RSOneRes = RSOne.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);         
     		    }
-    	 		else if(RSTwoRes == null){
+    	 		if(RSTwoRes == null){
                     RSTwoRes = RSTwo.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);          
     	 		}
-    	 		else if(RSThreeRes == null) {
+    	 		if(RSThreeRes == null) {
                     RSThreeRes = RSThree.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
     	 		}
-    	 		else if(RSFourRes == null){
+    	 		if(RSFourRes == null){
                     RSFourRes = RSFour.cancelBookingHere(bookingID, id, location+"!"+sequenceNUM);
     	 		}
     	        if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
