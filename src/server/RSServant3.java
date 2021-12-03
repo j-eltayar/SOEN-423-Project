@@ -26,7 +26,7 @@ public class RSServant3 extends RSPOA{
 	private String replicaServerLogName;
 	//An orb
 	private ORB orb;
-	
+	private int sequenceIntRS = 0;
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
 		orb = orb_val;
@@ -82,6 +82,14 @@ public class RSServant3 extends RSPOA{
         String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
+    	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
+    	
 		Date roomDate = getDate(date);
 		String[] timeSlotsString = List_Of_Time_Slots.split("\\.");
 		TimeSlot[] timeSlots = new TimeSlot[timeSlotsString.length];
@@ -91,7 +99,7 @@ public class RSServant3 extends RSPOA{
 		replicaServerAnswer = server.createRoom(roomNumber, roomDate, timeSlots, id);
 
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer+"1";
+        return replicaServerAnswer;
 	}
 
 	private Date getDate(String date) {
@@ -116,6 +124,14 @@ public class RSServant3 extends RSPOA{
 		String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
+    	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
+    	
 		Date roomDate = getDate(date);
 		String[] timeSlotsString = List_Of_Time_Slots.split("\\.");
 		TimeSlot[] timeSlots = new TimeSlot[timeSlotsString.length];
@@ -125,7 +141,7 @@ public class RSServant3 extends RSPOA{
 		replicaServerAnswer = server.deleteRoom(roomNumber, roomDate, timeSlots, id);
 
 		this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer+"2";
+        return replicaServerAnswer;
 	}
 
 	@Override
@@ -134,12 +150,20 @@ public class RSServant3 extends RSPOA{
 		String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
+    	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
+    	
 		Date roomDate = getDate(date);
 		TimeSlot timeSlot = getTimeSlot(timeslot);
 		replicaServerAnswer = server.bookRoom(Campus.valueOf(campusName), roomNumber, roomDate, timeSlot, id);
 
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer+"3";
+        return replicaServerAnswer;
 	}
 
 	@Override
@@ -149,11 +173,18 @@ public class RSServant3 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
     	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
+    	
 		Date roomDate = getDate(date);
 		replicaServerAnswer = server.getAvailableTimeSlot(roomDate, id);
 
 		this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer+"4";
+        return replicaServerAnswer;
 	}
 
 	@Override
@@ -162,11 +193,18 @@ public class RSServant3 extends RSPOA{
 		String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
+    	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
 
 		replicaServerAnswer = server.cancelBooking(bookingID, id);
 
 		this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer+"5";
+        return replicaServerAnswer;
 	}
 
 	@Override

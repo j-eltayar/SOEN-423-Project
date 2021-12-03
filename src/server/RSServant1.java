@@ -27,6 +27,7 @@ public class RSServant1 extends RSPOA{
 	private ORB orb;
 	// Create Database
 	private HashMap<String, HashMap<Integer, List<String[]>>> dataBase;
+	private int sequenceIntRS = 0;
 	
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
@@ -100,7 +101,14 @@ public class RSServant1 extends RSPOA{
         String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
-        
+    	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
+
         // Implement here
         // String to proper list
  		List<String[]> List_Of_Time_Slots = new ArrayList<String[]>();
@@ -145,7 +153,7 @@ public class RSServant1 extends RSPOA{
      	}
         
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer+"1";
+        return replicaServerAnswer;
 	}
 
 	@Override
@@ -154,7 +162,13 @@ public class RSServant1 extends RSPOA{
         String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
-        
+    	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
         // Implement here
         // String to proper list
  		List<String[]> List_Of_Time_Slots = new ArrayList<String[]>();
@@ -189,7 +203,7 @@ public class RSServant1 extends RSPOA{
  		replicaServerAnswer = "DELETE ROOM (SUCCESS)";
         
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer+"2";
+        return replicaServerAnswer;
 	}
 
 	@Override
@@ -199,7 +213,13 @@ public class RSServant1 extends RSPOA{
     	String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
-
+    	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
     
         // Implement here
         String bookingID = campusName + "|" + date+  "|" + roomNumber + "|"  + timeslot + "|" + id;
@@ -228,7 +248,7 @@ public class RSServant1 extends RSPOA{
 		}    	
         
         this.replicaManagerLog("BOOK ROOM (SUCCESS)"+ replicaServerAnswer);
-        return replicaServerAnswer+"3";
+        return replicaServerAnswer;
 	}
 
 	@Override
@@ -238,7 +258,13 @@ public class RSServant1 extends RSPOA{
         String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
-
+    	
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
         // Implement here
         int total = 0;
 		if(this.getDataBase().get(date)!=null){
@@ -257,7 +283,7 @@ public class RSServant1 extends RSPOA{
 		}
         
         this.replicaManagerLog("Slots here: " + replicaServerAnswer);
-        return replicaServerAnswer+"4";
+        return replicaServerAnswer;
 	}
 
 	@Override
@@ -268,6 +294,13 @@ public class RSServant1 extends RSPOA{
     	location = loca[0];
     	String sequenceint = loca[1];
         
+    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    		return "CREATE ROOM (FAILURE) SEQUENCER";
+    	}
+    	else {
+    		sequenceIntRS++;
+    	}
+    	
         // Implement here
         String[] bookingIDArray = bookingID.split("\\|");
 		String date = bookingIDArray[1];
@@ -300,7 +333,7 @@ public class RSServant1 extends RSPOA{
 		}
         
         this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer+"5";
+        return replicaServerAnswer;
 	}
 
 	@Override
