@@ -243,7 +243,7 @@ public class RMServant extends RMPOA {
         if(location.contentEquals(replicaManagerName)) {
         	
         	sequenceNUM++;
-        	addMethodCall("campusName"+";"+roomNumber+";"+date+";"+timeslot+";"+id+";"+location);
+        	addMethodCall("bookRoom"+";"+campusName+";"+roomNumber+";"+date+";"+timeslot+";"+id+";"+location);
         	long start = System.currentTimeMillis();
         	long end = start + worstTime*2;
         	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;

@@ -64,7 +64,26 @@ public class RSServant1 extends RSPOA{
 		return "\nHello World From: " + this.replicaServerName + "\n" ;
 		
 	}
-	
+	public void handleError(String s) {
+		this.dataBase = new HashMap<String, HashMap<Integer, List<String[]>>>();
+		
+		String[] calls = s.split("!");
+		this.sequenceIntRS = 0;
+		for ( int i = 0; i< calls.length;i++) {
+			String[] params = calls[i].split(";");
+			if(params[0].equals("createRoom")) {
+				this.createRoomHere(Integer.parseInt(params[1]), params[2], params[3], params[4], params[5]);
+			} else if(params[0].equals("deleteRoom")) {
+				this.deleteRoomHere(Integer.parseInt(params[1]), params[2], params[3], params[4], params[5]);
+			} else if(params[0].equals("bookRoom")) {
+				this.bookRoomHere(params[1], Integer.parseInt(params[2]), params[3], params[4], params[5], params[6]);
+			} else if(params[0].equals("getAvailableTimeSlot")) {
+				this.getAvailableTimeSlotHere(params[1], params[2], params[3]);
+			} else if(params[0].equals("cancelBooking")){
+				this.cancelBookingHere(params[1], params[2], params[3]);
+			}
+		}
+	}
 	// Log method that takes a string and then inputs it into the RM's log file.
 	public void replicaManagerLog(String input) {
         try {
@@ -97,63 +116,68 @@ public class RSServant1 extends RSPOA{
 
 	@Override
 	public String createRoomHere(int roomNumber, String date, String String_Of_Time_Slots, String id, String location) {
-        String replicaServerAnswer = "";
-        String[] loca = location.split("!"); 
-    	location = loca[0];
-    	String sequenceint = loca[1];
-    	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
-    		return "CREATE ROOM (FAILURE) SEQUENCER";
-    	}
-    	else {
-    		sequenceIntRS++;
-    	}
-
-        // Implement here
-        // String to proper list
- 		List<String[]> List_Of_Time_Slots = new ArrayList<String[]>();
- 		String[] stringArrays =  String_Of_Time_Slots.split("\\.");
- 		for(int i = 0; i<stringArrays.length; i++) {
- 			String[] temp = new String[]{stringArrays[i].split(",")[0], stringArrays[i].split(",")[1], stringArrays[i].split(",")[2]};
- 			List_Of_Time_Slots.add(temp);
- 		}
- 		String addedTS = "";
-
-     	if(this.getDataBase().containsKey(date)){
-     		if(this.getDataBase().get(date).containsKey(roomNumber)){				
-     			for (int i = 0; i<List_Of_Time_Slots.size(); i++) {
- 					int match = 0;
-     				for (int j = 0; j<this.getDataBase().get(date).get(roomNumber).size(); j++) {
-     					if(List_Of_Time_Slots.get(i)[0].equals(this.getDataBase().get(date).get(roomNumber).get(j)[0])) {
-     						match = 1;						
-     					}
-     					else {   													
-     					}
-     				} 
- 					if(match == 0){
- 						this.getDataBase().get(date).get(roomNumber).add(List_Of_Time_Slots.get(i));
- 						addedTS = addedTS + " [ " + List_Of_Time_Slots.get(i)[0] + " | " + List_Of_Time_Slots.get(i)[1] + " | " + List_Of_Time_Slots.get(i)[2] + " ] ";
- 					}   					
-     			}
- 				if(addedTS.equals("")){
- 					replicaServerAnswer = "CREATE ROOM (FAILURE)";
- 				} 
- 				replicaServerAnswer = "CREATE ROOM (SUCCESS)";
-     		}
-     		else {
-     			this.getDataBase().get(date).put(roomNumber, List_Of_Time_Slots);
-     			replicaServerAnswer = "CREATE ROOM (SUCCESS)";
-     		}
-     	}
-     	else {
-     		HashMap<Integer, List<String[]>> tempHP = new HashMap<Integer, List<String[]>>();
-     		tempHP.put(roomNumber, List_Of_Time_Slots);
-     		this.getDataBase().put(date, tempHP);
-     		replicaServerAnswer = "CREATE ROOM (SUCCESS)";
-     	}
-        
-        this.replicaManagerLog(replicaServerAnswer);
-        return replicaServerAnswer;
+		if(roomNumber == -1) {
+			this.handleError(date);
+			return "restarting server";
+		} else {
+	        String replicaServerAnswer = "";
+	        String[] loca = location.split("!"); 
+	    	location = loca[0];
+	    	String sequenceint = loca[1];
+	    	
+	    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+	    		return "CREATE ROOM (FAILURE) SEQUENCER";
+	    	}
+	    	else {
+	    		sequenceIntRS++;
+	    	}
+	
+	        // Implement here
+	        // String to proper list
+	 		List<String[]> List_Of_Time_Slots = new ArrayList<String[]>();
+	 		String[] stringArrays =  String_Of_Time_Slots.split("\\.");
+	 		for(int i = 0; i<stringArrays.length; i++) {
+	 			String[] temp = new String[]{stringArrays[i].split(",")[0], stringArrays[i].split(",")[1], stringArrays[i].split(",")[2]};
+	 			List_Of_Time_Slots.add(temp);
+	 		}
+	 		String addedTS = "";
+	
+	     	if(this.getDataBase().containsKey(date)){
+	     		if(this.getDataBase().get(date).containsKey(roomNumber)){				
+	     			for (int i = 0; i<List_Of_Time_Slots.size(); i++) {
+	 					int match = 0;
+	     				for (int j = 0; j<this.getDataBase().get(date).get(roomNumber).size(); j++) {
+	     					if(List_Of_Time_Slots.get(i)[0].equals(this.getDataBase().get(date).get(roomNumber).get(j)[0])) {
+	     						match = 1;						
+	     					}
+	     					else {   													
+	     					}
+	     				} 
+	 					if(match == 0){
+	 						this.getDataBase().get(date).get(roomNumber).add(List_Of_Time_Slots.get(i));
+	 						addedTS = addedTS + " [ " + List_Of_Time_Slots.get(i)[0] + " | " + List_Of_Time_Slots.get(i)[1] + " | " + List_Of_Time_Slots.get(i)[2] + " ] ";
+	 					}   					
+	     			}
+	 				if(addedTS.equals("")){
+	 					replicaServerAnswer = "CREATE ROOM (FAILURE)";
+	 				} 
+	 				replicaServerAnswer = "CREATE ROOM (SUCCESS)";
+	     		}
+	     		else {
+	     			this.getDataBase().get(date).put(roomNumber, List_Of_Time_Slots);
+	     			replicaServerAnswer = "CREATE ROOM (SUCCESS)";
+	     		}
+	     	}
+	     	else {
+	     		HashMap<Integer, List<String[]>> tempHP = new HashMap<Integer, List<String[]>>();
+	     		tempHP.put(roomNumber, List_Of_Time_Slots);
+	     		this.getDataBase().put(date, tempHP);
+	     		replicaServerAnswer = "CREATE ROOM (SUCCESS)";
+	     	}
+	        
+	        this.replicaManagerLog(replicaServerAnswer);
+	        return replicaServerAnswer;
+			}
 	}
 
 	@Override
