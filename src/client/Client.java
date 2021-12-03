@@ -81,42 +81,42 @@ public class Client
     
     public String createRoom(int room_Number, String date, String list_Of_Time_Slots, String location) {
         String serverAnswer = "";
-        currentReplicaManager.createRoom(room_Number, date, list_Of_Time_Slots, this.id, location);
+        serverAnswer = currentReplicaManager.createRoom(room_Number, date, list_Of_Time_Slots, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String deleteRoom(int room_Number, String date, String list_Of_Time_Slots, String location) {
         String serverAnswer = "";
-        currentReplicaManager.deleteRoom(room_Number, date, list_Of_Time_Slots, this.id, location);
+        serverAnswer = currentReplicaManager.deleteRoom(room_Number, date, list_Of_Time_Slots, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String bookRoom(String campusName, int roomNumber, String date, String timeslot, String location) {
         String serverAnswer = "";
-        currentReplicaManager.bookRoom(campusName, roomNumber, date, timeslot, this.id, location);
+        serverAnswer = currentReplicaManager.bookRoom(campusName, roomNumber, date, timeslot, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String getAvailableTimeSlot(String date, String location) {
         String serverAnswer = "";
-        currentReplicaManager.getAvailableTimeSlot(date, this.id, location);
+        serverAnswer = currentReplicaManager.getAvailableTimeSlot(date, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String cancelBooking(String bookingID, String location) {
         String serverAnswer = "";
-        currentReplicaManager.cancelBooking(bookingID, this.id, location);
+        serverAnswer = currentReplicaManager.cancelBooking(bookingID, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }
     
     public String changeReservation(String bookingID, String selectedCampus, int selectedRoom, String selectedDate, String selectedTimeslot, String id, String location) {
         String serverAnswer = "";
-        currentReplicaManager.changeReservation(bookingID, selectedCampus, selectedRoom, selectedTimeslot, selectedDate, this.id, location);
+        serverAnswer = currentReplicaManager.changeReservation(bookingID, selectedCampus, selectedRoom, selectedTimeslot, selectedDate, this.id, location);
         this.clientLog(serverAnswer);
         return serverAnswer;
     }

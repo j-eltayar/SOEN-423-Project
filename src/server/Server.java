@@ -32,20 +32,20 @@ public class Server {
 			// Create DVL Replica Servers
 			RSServant1 rsServantDVL1 = new RSServant1("DVL1");
 			RSServant2 rsServantDVL2 = new RSServant2("DVL2");
-			RSServant3 rsServantDVL3 = new RSServant3("DVL3");
-			RSServant4 rsServantDVL4 = new RSServant4("DVL4");
+			RSServant2 rsServantDVL3 = new RSServant2("DVL3");
+			RSServant1 rsServantDVL4 = new RSServant1("DVL4");
 			
 			// Create KKL Replica Servers
 			RSServant1 rsServantKKL1 = new RSServant1("KKL1");
 			RSServant2 rsServantKKL2 = new RSServant2("KKL2");
-			RSServant3 rsServantKKL3 = new RSServant3("KKL3");
-			RSServant4 rsServantKKL4 = new RSServant4("KKL4");
+			RSServant2 rsServantKKL3 = new RSServant2("KKL3");
+			RSServant1 rsServantKKL4 = new RSServant1("KKL4");
 			
 			// Create WST Replica Servers
 			RSServant1 rsServantWST1 = new RSServant1("WST1");
 			RSServant2 rsServantWST2 = new RSServant2("WST2");
-			RSServant3 rsServantWST3 = new RSServant3("WST3");
-			RSServant4 rsServantWST4 = new RSServant4("WST4");
+			RSServant2 rsServantWST3 = new RSServant2("WST3");
+			RSServant1 rsServantWST4 = new RSServant1("WST4");
 			
 			// Set Orbs for Replica Managers
 			rmServantDVL.setORB(orb);

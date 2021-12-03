@@ -110,7 +110,7 @@ public class RSServant4 extends RSPOA {
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -175,7 +175,7 @@ public class RSServant4 extends RSPOA {
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -222,7 +222,7 @@ public class RSServant4 extends RSPOA {
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -264,7 +264,7 @@ public class RSServant4 extends RSPOA {
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
@@ -293,7 +293,7 @@ public class RSServant4 extends RSPOA {
     	location = loca[0];
     	String sequenceint = loca[1];
     	
-    	if(this.sequenceIntRS-1 != Integer.parseInt(sequenceint)) {
+    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
