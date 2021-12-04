@@ -201,7 +201,9 @@ public class RSServant2 extends RSPOA{
         String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
-    	
+    	int test = this.sequenceIntRS+1;
+    	System.out.println("RS at 2 = " + test);
+    	System.out.println("RMS at 2 = " + Integer.parseInt(sequenceint));
     	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}

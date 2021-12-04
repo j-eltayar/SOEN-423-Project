@@ -36,7 +36,6 @@ public class Client
 			// resolve the Object Reference in Naming
 			String name = location;
 			currentReplicaManager = RMHelper.narrow(ncRef.resolve_str(name));
-			System.out.println(currentReplicaManager.sayHello());
 		} 		
 		catch (Exception e) {		
 			e.printStackTrace(System.out);
@@ -223,9 +222,9 @@ public class Client
                     }
                     else if (option == 5) {
                     	System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
-                    	System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
-                    	System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
-                    	System.out.println(client.createRoom(101, "03-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.createRoom(101, "04-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.createRoom(101, "05-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.createRoom(101, "06-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
                     }
                     else {
                         if (option != 6) {
