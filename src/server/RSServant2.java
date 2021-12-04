@@ -59,7 +59,6 @@ public class RSServant2 extends RSPOA{
 		
 		
 		public String setBooked(String time, String studentId ) {
-			System.out.println("booking");
 			
 			if (this.getAvailableTimess().get(time) == null||this.getAvailableTimess().get(time)[0] != "None") 
 				return "BOOK ROOM (FAILURE)";
@@ -201,12 +200,12 @@ public class RSServant2 extends RSPOA{
         String[] loca = location.split("!"); 
     	location = loca[0];
     	String sequenceint = loca[1];
-    	
+    	int test = this.sequenceIntRS+1;
     	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
     		return "CREATE ROOM (FAILURE) SEQUENCER";
     	}
     	else {
-    		sequenceIntRS++;
+    		this.sequenceIntRS++;
     	}
     	
         // Implement here

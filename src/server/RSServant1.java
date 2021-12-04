@@ -124,11 +124,12 @@ public class RSServant1 extends RSPOA{
 	        String[] loca = location.split("!"); 
 	    	location = loca[0];
 	    	String sequenceint = loca[1];
+	    	int test = this.sequenceIntRS+1;
 	    	if(this.sequenceIntRS+1 != Integer.parseInt(sequenceint)) {
 	    		return "CREATE ROOM (FAILURE) SEQUENCER";
 	    	}
 	    	else {
-	    		sequenceIntRS++;
+	    		this.sequenceIntRS+=1;
 	    	}
 	
 	        // Implement here

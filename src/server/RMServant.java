@@ -13,7 +13,14 @@ import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 /*
  *	Replica Manager Class: Layer of abstraction before communication with the replica servers that store the actual infromation and preform the actual
@@ -41,10 +48,11 @@ public class RMServant extends RMPOA {
 	private RS RSFour;
 	// An orb
 	private ORB orb;
-	int sequenceNUM;
-	private String methodCalls;
+	int sequenceNUM = 0;
+	private String methodCalls="!@";
 	private long worstTime = 5000;
 	private int[] replicaExceptionCount = {0,0,0,0};
+	
 
 	// Setter for the orb of this servant
 	public void setORB(ORB orb_val) {
@@ -68,6 +76,7 @@ public class RMServant extends RMPOA {
 	}
 	 
 	public void handleException(RS rs) {
+		System.out.println(rs.sayHello());
 		String s = "f";
 		rs.createRoomHere(-1, methodCalls,s,s,s);
 	}
@@ -75,8 +84,9 @@ public class RMServant extends RMPOA {
 	public void handleCrash(int i) {
 		
 		try {
-			RSServant1 newRS = new RSServant1(this.replicaManagerName+i);
-			if(this.methodCalls!=null) {
+			RSServant2 newRS = new RSServant2(this.replicaManagerName+i);
+			if(!this.methodCalls.contentEquals("!@")) {
+				System.out.println("Exception FLAMES");
 				newRS.handleError(this.methodCalls);
 			}
 			newRS.setORB(this.orb);
@@ -89,6 +99,7 @@ public class RMServant extends RMPOA {
 			NameComponent pathRSNew[] = ncRef.to_name(this.replicaManagerName+i);
 			ncRef.rebind(pathRSNew, hrefNewRS);
 			this.setRSServers();
+			replicaExceptionCount[i-1]=0;
 			
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -198,104 +209,76 @@ public class RMServant extends RMPOA {
     
 	// Create Room method. Create a room in all replicas. 
     @Override
-	public String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
+	public synchronized String createRoom(int roomNumber, String date, String List_Of_Time_Slots, String id, String location)
     {	
+    	
+    	this.replicaManagerLog("start->"+intArrayToString(replicaExceptionCount));
         String replicaManagerAnswer = "";
         sequenceNUM++;
         addMethodCall("createRoom;"+roomNumber+";"+date+";"+List_Of_Time_Slots+";"+id+";"+location+"!"+sequenceNUM);
-        long start = System.currentTimeMillis();
-    	long end = start + worstTime*2;
     	String RSOneRes = null, RSTwoRes= null , RSThreeRes= null, RSFourRes = null;
     	
-    	while (System.currentTimeMillis() < end) {
-    		if(RSOneRes==null){
-    			if(replicaExceptionCount[0]>=3) {
-    				handleException(RSOne);
-    				replicaExceptionCount[0]=0;
-    				RSOneRes = "Restarted";
-    			}
-    			else {
-    				try {
-        				RSOneRes = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
-    				}
-    				catch(Exception e){
-            			handleCrash(1);
-            			this.replicaManagerLog("Handling crash on->"+1);
-    				}
-    			}
-    		}
-    		if(RSTwoRes == null){
-    			if(replicaExceptionCount[1]>=3) {
-    				this.replicaManagerLog("before->"+intArrayToString(replicaExceptionCount));
-    				handleException(RSTwo);
-    				replicaExceptionCount[1]=0;
-    				RSTwoRes = "Restarted";
-    				this.replicaManagerLog("after->"+intArrayToString(replicaExceptionCount));
-    			}
-    			else {
-    				try {
-        				RSTwoRes = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
-    				}
-    				catch(Exception e){
-            			handleCrash(2);
-            			this.replicaManagerLog("Handling crash on->"+2);
-    				}
-    			}
-    		}
-    		if(RSThreeRes == null) {
-    			if(replicaExceptionCount[2]>=3) {
-    				this.replicaManagerLog("before->"+intArrayToString(replicaExceptionCount));
-    				handleException(RSThree);
-    				replicaExceptionCount[2]=0;
-    				RSThreeRes = "Restarted";
-    				this.replicaManagerLog("after->"+intArrayToString(replicaExceptionCount));
-    				
-    			}
-    			else {
-    				try {
-        				RSThreeRes = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
-    				}
-    				catch(Exception e){
-            			handleCrash(3);
-            			this.replicaManagerLog("Handling crash on->"+3);
-    				}
-    			}	
-    		}
-    		if(RSFourRes == null){
-    			if(replicaExceptionCount[3]>=3) {
-    				handleException(RSFour);
-    				replicaExceptionCount[3]=0;
-    				RSFourRes = "Restarted";
-    			}
-    			else {
-    				try {
-        				RSFourRes =  RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM);
-    				}
-    				catch(Exception e){
-            			handleCrash(4);
-            			this.replicaManagerLog("Handling crash on->"+4);
-    				}
-    			}	
-    		}
-            if(RSOneRes!=null && RSTwoRes !=null && RSThreeRes!=null && RSFourRes != null) {
-            	if(this.worstTime<(System.currentTimeMillis() - start)) {
-            		this.worstTime = System.currentTimeMillis() - start;
-            	}
-            	break;
-            }
-    	}
+    	
+    	try {
+			ExecutorService executor1 = Executors.newCachedThreadPool();
+			List<Future<String>> returns1 = executor1.invokeAll(Arrays.asList(new CreateRoomTask(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM, 1), new CreateRoomTask(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM, 2), new CreateRoomTask(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM, 3), new CreateRoomTask(roomNumber, date, List_Of_Time_Slots, id, location+"!"+sequenceNUM, 4)), 10000, TimeUnit.MILLISECONDS); // Timeout of 10 seconds.
+			
+			executor1.shutdown();
+			RSOneRes = returns1.get(0).get(); 
+			RSTwoRes = returns1.get(1).get();
+			RSThreeRes = returns1.get(2).get();
+			RSFourRes = returns1.get(3).get();
+			
+		}
+		catch(Exception e){
+			this.replicaManagerLog("Handling crash"+ e);
+		}
+
+    	
     	String[] answerArray = {RSOneRes, RSTwoRes, RSThreeRes, RSFourRes};
     	for(int i = 0; i<answerArray.length;i++) {
     		if(answerArray[i]!=null) {
     			continue;
     		}
     		else {
-    			handleCrash(i);
-    			this.replicaManagerLog("Handling crash on->"+i);
+    			answerArray[i]="Crash";
+    			handleCrash(i+1);
+    			this.replicaManagerLog("Handling NULL crash on->"+i);
     		}
     	}
+    	
     	this.replicaManagerLog("end->"+intArrayToString(replicaExceptionCount));
-        replicaManagerAnswer = validateResponseString(RSOneRes, RSTwoRes, RSThreeRes, RSFourRes);
+    	replicaManagerAnswer = validateResponseString(answerArray[0], answerArray[1], answerArray[2], answerArray[3]);
+    	
+        if(replicaExceptionCount[0]>=3) {
+			replicaExceptionCount[0]=0;
+			handleCrash(1);
+			RSOneRes = "Restarted";
+		} else {
+			
+		}
+		if(replicaExceptionCount[1]>=3) {
+			handleCrash(2);
+			replicaExceptionCount[1]=0;
+			RSTwoRes = "Restarted";
+		} else{
+			
+		}
+		if(replicaExceptionCount[2]>=3) {
+			handleCrash(3);
+			replicaExceptionCount[2]=0;
+			RSThreeRes = "Restarted";
+		} else {
+			
+		}
+		if(replicaExceptionCount[3]>=3) {
+			handleCrash(4);
+			replicaExceptionCount[3]=0;
+			RSFourRes = "Restarted";
+		} else {
+			
+		}
+		
         this.replicaManagerLog(replicaManagerAnswer);
         return replicaManagerAnswer;
     }
@@ -785,6 +768,9 @@ public class RMServant extends RMPOA {
 	                		replicaExceptionCount[j]++;
 	                		this.replicaManagerLog(intArrayToString(replicaExceptionCount));
 	                	}
+	                	else if(resArray[j].contains("Restarted")){
+	                		
+	                	}
 	                	else if (resArray[i].equals(resArray[j])) {
 	                        seen[j] = true;
 	                        count++;
@@ -799,12 +785,14 @@ public class RMServant extends RMPOA {
 	        
 	    }
 	    for(int i = 0; i<resArray.length;i++) {
-    		if(resArray[i].equals(result) || resArray[i].equals("Restarted")) {
+	    	// Don't Increment
+    		if(resArray[i].equals(result) || resArray[i].equals("Restarted") || resArray[i].equals("Crash")) {
     			if(resArray[i].equals("Restarted")){
-    				System.out.println("Resarted->"+ i);
+    				this.replicaManagerLog("Restarted->"+ i);
     			}
     			continue;
     		}
+    		// Increment
     		else {
     			replicaExceptionCount[i]++;
     			this.replicaManagerLog(intArrayToString(replicaExceptionCount));
@@ -839,6 +827,46 @@ public class RMServant extends RMPOA {
 		 replicaManagerAnswer = popular;
 		 return replicaManagerAnswer;
 	}
+	
+	class CreateRoomTask implements Callable<String> {
+		private String answer;
+		int roomNumber;
+		String date;
+		String List_Of_Time_Slots;
+		String id;
+		String location;
+		int rs;
+	    
+	    public CreateRoomTask(int roomNumber, String date, String List_Of_Time_Slots, String id, String location, int rs) {
+	    	this.roomNumber = roomNumber;
+	    	this.date = date;
+			this.List_Of_Time_Slots = List_Of_Time_Slots;
+			this.id = id;
+			this.location = location;
+			this.rs = rs;
+	    	
+	    }
+	    @Override
+	    public String call() throws Exception {
+	    	if(rs==1) {
+	    		answer = RSOne.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location);
+		    	return answer;
+	    	}
+	    	else if(rs==2) {
+	    		answer = RSTwo.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location);
+		    	return answer;
+	    	}
+	    	else if(rs==3) {
+	    		answer = RSThree.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location);
+		    	return answer;
+	    	}
+	    	else {
+	    		answer = RSFour.createRoomHere(roomNumber, date, List_Of_Time_Slots, id, location);
+		    	return answer;
+	    	}
+	    }
+	}
+	
 	
 
 }

@@ -37,8 +37,8 @@ public class Server {
 			// Create DVL Replica Servers
 			RSServant1 rsServantDVL1 = new RSServant1("DVL1");
 			RSServant2 rsServantDVL2 = new RSServant2("DVL2");
-			RSServant2 rsServantDVL3 = new RSServant2("DVL3");
-			RSServant4 rsServantDVL4 = new RSServant4("DVL4");
+			RSServantSequencer rsServantDVL3 = new RSServantSequencer("DVL3");
+			RSServantWrongResponse rsServantDVL4 = new RSServantWrongResponse("DVL4");
 			
 			
 			// Create KKL Replica Servers
