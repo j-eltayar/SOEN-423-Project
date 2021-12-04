@@ -41,7 +41,7 @@ public class Database {
         if (!dates.get(date).containsKey(roomNumber)) {
             addRoom(date, roomNumber);
         }
-        if (dates.get(date).get(roomNumber).containsKey(timeSlot)) {
+        if (dates.get(date).get(roomNumber).keySet().stream().anyMatch(timeSlot::overlaps)) {
             throw new BookingException("The TimeSlot already exists.");
         } else if (overlapsTimeSlots(date, roomNumber, timeSlot)){
             throw new BookingException("The TimeSlot overlaps another TimeSlot.");
@@ -86,16 +86,14 @@ public class Database {
     }
 
     synchronized public String makeBooking(Date date, int roomNumber, TimeSlot timeSlot, String studentID) throws BookingException {
-        System.out.println(Thread.currentThread().getId());
         String bookingID;
         if (hasTimeSlot(date, roomNumber, timeSlot)) {
             try {
                 int count = studentReservationsCount.getOrDefault(studentID, 0);
                 bookingID = dates.get(date).get(roomNumber).get(timeSlot).bookRoom(campus.name(), studentID);
                 count++;
-                String altBookingID = campus.name() + "|" + date.toString() + "|" + roomNumber + "|" + timeSlot.getStart() + "|" + studentID;
                 studentReservationsCount.put(studentID, count);
-                return altBookingID;
+                return bookingID;
             } catch (BookingException e) {
                 throw new BookingException(e.getMessage());
             }
@@ -137,5 +135,9 @@ public class Database {
 
     private boolean hasTimeSlot(Date date, int roomNumber, TimeSlot timeSlot) {
         return hasRoom(date, roomNumber) && (dates.get(date).get(roomNumber).containsKey(timeSlot));
+    }
+
+    public void printAllTimeSlots() {
+        dates.values().forEach(integerHashMapHashMap -> integerHashMapHashMap.forEach((integer, timeSlotRoomRecordHashMap) -> timeSlotRoomRecordHashMap.forEach((timeSlot, roomRecord) -> System.out.println(roomRecord))));
     }
 }

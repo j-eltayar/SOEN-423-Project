@@ -1,6 +1,5 @@
 package killian.core;
 
-import javax.xml.ws.Endpoint;
 import java.io.IOException;
 import java.net.*;
 import java.util.Arrays;
@@ -20,12 +19,6 @@ public class CampusServerImpl implements CampusServer, Runnable {
         super();
         this.database = new Database(campus);
         this.campus = campus;
-        try {
-            this.socket = new DatagramSocket(6000 + campus.getIndex());
-        } catch (SocketException e) {
-            System.out.println("ERROR : " + e.getMessage());
-            throw e;
-        }
     }
 
     @Override
@@ -53,88 +46,34 @@ public class CampusServerImpl implements CampusServer, Runnable {
 
     @Override
     public String getAvailableTimeSlot(Date date, String id) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(campus.name())
-                .append(" : ")
-                .append(this.database.getTimeSlotAvailableCount(date))
-                .append("\n");
-
-        String message = "GET_COUNT " + date.toString();
-        for (Campus campus : Campus.values()) {
-
-            //send request for counts except if this campus
-            if (campus.getIndex()  != this.campus.getIndex()) {
-                String response = sendRequest(campus, message);
-                sb.append(response).append("\n");
-            }
-        }
-        return sb.toString();
+        return campus.name() +
+                " : " +
+                this.database.getTimeSlotAvailableCount(date);
     }
 
     @Override
     public String bookRoom(Campus campus, int roomNumber, Date date, TimeSlot timeSlot, String id) {
-        int bookingCount = this.database.getBookingNum(id);
-        String message = "GET_BOOKING_COUNT " + id;
-        try {
-            for (Campus campusName : Campus.values()) {
-                //send request for counts except if this campus
-                if (campusName.getIndex()  != this.campus.getIndex()) {
-                    String response = sendRequest(campusName, message);
-                    if (response.startsWith("ERROR")) {
-                        throw new BookingException("cannot book at this time since not all servers are up.");
-                    } else {
-                        bookingCount += Integer.parseInt(response);
-                    }
-                }
-            }
-        } catch (Exception e) {
-            return "BOOK ROOM (FAILURE)";
-        }
-
-        if (bookingCount < 3) {
-            return doBooking(campus, roomNumber, date, timeSlot, id);
-        } else {
-            return "BOOK ROOM (FAILURE)";
-        }
+        return doBooking(campus, roomNumber, date, timeSlot, id);
     }
 
 
     private String doBooking(Campus campus, int roomNumber, Date date, TimeSlot timeSlot, String id) {
-        String message;
-        if (campus != this.campus) {
-            message = "BOOK_ROOM " + roomNumber + " " + date.toString() + " " + timeSlot.getStart() + " " + timeSlot.getEnd() + " " + id;
-            return sendRequest(campus, message);
-        } else {
-            try {
-                return this.database.makeBooking(date, roomNumber, timeSlot, id);
-            } catch (BookingException e) {
-                System.out.println("ERROR : " + e.getMessage());
-                return "BOOK ROOM (FAILURE)";
-            }
+        try {
+            return this.database.makeBooking(date, roomNumber, timeSlot, id);
+        } catch (BookingException e) {
+            System.out.println("ERROR : " + e.getMessage());
+            return "BOOK ROOM (FAILURE)";
         }
     }
 
     @Override
     public String cancelBooking(String bookingID, String id) {
-        String campusName = bookingID.substring(0, 3);
-        if (!campus.name().equals(campusName)) {
-            String message = "CANCEL_ROOM " + bookingID + " " + id;
-            Campus campus;
-            try {
-                 campus = Campus.valueOf(campusName);
-            } catch (IllegalArgumentException e) {
-                System.out.println("ERROR : " + e.getMessage());
-                return "CANCEL BOOKING (FAILURE)";
-            }
-            return sendRequest(campus, message);
-        } else {
-            try {
-                this.database.cancelBooking(bookingID);
-                return "CANCEL BOOKING (SUCCESS)";
-            } catch (BookingException e) {
-                System.out.println("ERROR : " + e.getMessage());
-                return "CANCEL BOOKING (FAILURE)";
-            }
+        try {
+            this.database.cancelBooking(bookingID);
+            return "CANCEL BOOKING (SUCCESS)";
+        } catch (BookingException e) {
+            System.out.println("ERROR : " + e.getMessage());
+            return "CANCEL BOOKING (FAILURE)";
         }
     }
 

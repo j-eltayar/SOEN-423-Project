@@ -26,10 +26,8 @@ public class RoomRecord implements Serializable {
 
     public String bookRoom(String location, String studentID) throws BookingException {
         if (!isBooked()) {
-            UUID uuid = UUID.randomUUID();
-            bookingID = location + uuid;
             bookedBy = studentID;
-            return bookingID;
+            return bookingID = location + "|" + date.toString() + "|" + roomNumber + "|" + timeSlot.getStart() + "|" + studentID;
         } else {
             throw new BookingException("The room is already booked.");
         }
