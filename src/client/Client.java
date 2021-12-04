@@ -2,6 +2,7 @@ package client;
 
 import java.util.Properties;
 import java.util.Scanner;
+import java.util.concurrent.ExecutionException;
 
 import org.omg.CORBA.ORB;
 import org.omg.CosNaming.NamingContextExt;
@@ -78,7 +79,7 @@ public class Client
         return dtf.format(now);
     }
     
-    public String createRoom(int room_Number, String date, String list_Of_Time_Slots, String location) {
+    public String createRoom(int room_Number, String date, String list_Of_Time_Slots, String location) throws InterruptedException, ExecutionException {
         String serverAnswer = "";
     	if(!location.equals(location)) {
     		serverAnswer = "Invalid Location";
@@ -225,6 +226,7 @@ public class Client
                     	System.out.println(client.createRoom(101, "04-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
                     	System.out.println(client.createRoom(101, "05-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
                     	System.out.println(client.createRoom(101, "06-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
+                    	System.out.println(client.createRoom(101, "07-13-2021", "01:00" + "," + "Not Booked" + "," + " " + ",.", client.getLocation()));
                     }
                     else {
                         if (option != 6) {
